@@ -1,11 +1,14 @@
 const express = require('express');
 const mysql = require('mysql2/promise');
 const bcrypt = require('bcrypt');
+const path = require('path');
 
 const app = express();
-app.use(express.json()); // Parse JSON requests
+app.use(express.json()); 
 
-// Create a MySQL connection pool
+
+app.use(express.static(path.join(__dirname, 'templates')));
+
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -13,7 +16,12 @@ const pool = mysql.createPool({
   database: 'userinfo', // Replace with your actual database name
 });
 
-// POST route for signup
+// Route to serve the CreateAccount.html
+app.get('/signup', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'CreateAccount.html'));
+});
+
+// POST route for user signup
 app.post('/signup', async (req, res) => {
   try {
     const { username, password } = req.body;
