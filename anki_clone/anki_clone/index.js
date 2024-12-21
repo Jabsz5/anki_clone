@@ -1,1 +1,53 @@
-console.log('hello world');
+const express = require('express');
+const mysql = require('mysql2/promise');
+const bcrypt = require('bcrypt');
+
+const app = express();
+app.use(express.json()); // Parse JSON requests
+
+// Create a MySQL connection pool
+const pool = mysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '', // Replace with your MySQL password
+  database: 'userinfo', // Replace with your actual database name
+});
+
+// POST route for signup
+app.post('/signup', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Basic validation
+    if (!username || !password) {
+      return res.status(400).send('Username and password are required');
+    }
+
+    // Hash the password
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Insert user into the database
+    const sql = `
+      INSERT INTO anki_clone_info (username, password)
+      VALUES (?, ?)
+    `;
+    await pool.query(sql, [username, hashedPassword]);
+
+    res.status(201).send('Account created successfully');
+  } catch (err) {
+    console.error('Error in /signup:', err);
+
+    // Handle duplicate username errors
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(400).send('Username already exists');
+    }
+
+    res.status(500).send('Internal server error');
+  }
+});
+
+// Start the server
+app.listen(3000, () => {
+  console.log('Server running on http://localhost:3000');
+});
