@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'templates')));
 const pool = mysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '', // Replace with your MySQL password
+  password: '14640!Manager', // Replace with your MySQL password
   database: 'userinfo', // Replace with your actual database name
 });
 
