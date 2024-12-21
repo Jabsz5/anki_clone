@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anki-Clone</title>
+
+    <style>
+        ul{
+            list-style-type: disc;
+            margin-top: 10px;
+        }
+
+        li{
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .LanguageList{
+            display: flex;
+            gap: 200px;
+        }
+        .list-container{
+            display: block;
+            flex: 1;
+        }
+
+        a{
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Anki-Clone for Spanish and Russian</h2>
+    
+    <input type="text" id="textbox" placeholder="Enter a word">
+
+    <div class="LanguageList">
+        <div class="list-container">
+            <h3>Spanish List</h3>
+            <ul id ='SpanishList'></ul>
+        </div>
+
+        <div class="list-container">
+            <h3>Russian List</h3>
+            <ul id ='RussianList'></ul>
+        </div>
+    </div>
+
+    <button id="insertWordbtn" onclick="addtoList()">Add to List</button>
+    <button id="Remove" onclick="removeWord()">Remove from list</button>
+    <button id="Export to excel spreadhseet" onclick="exportToExcel()">Export</button>
+    <button id="Recommendation">Recommend</button>
+
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script>
+     function detectChar(char){
+        const code = char.charCodeAt(0);
+
+        if (code >= 0x0041 && code <= 0x007A){
+            return "Latin";
+        } else if (code >= 0x0400 && code <= 0x04FF){
+            return "Cyrillic";
+        } else{
+            return "Unknown lol";
+        }
+    }
+
+    const inputText = document.getElementById("textbox");
+    const addButton = document.getElementById("insertWordbtn");
+
+    inputText.addEventListener("keydown", function(event) {
+        const textbox = document.getElementById('textbox');
+
+        const userInput = inputText.value;
+        if (event.key === "Enter"){
+            addtoList();
+            textbox.value = '';
+            return;
+        }
+    });
+  
+
+    function addwithHyperLink(text, currList){
+
+        const link = document.createElement("a");
+        if (detectChar(text) === "Cyrillic"){ 
+            link.href = "https://en.openrussian.org/ru/" + text;
+        }
+        if (detectChar(text) === "Latin"){
+            link.href = "https://www.spanishdict.com/translate/" + text;
+        }
+        link.textContent = text;
+        link.target = "_blank";
+
+        currList.appendChild(link);
+    }
+
+    function addtoList(){
+        const textbox = document.getElementById('textbox');
+        const inputText = textbox.value;
+
+        if (inputText.trim() == ''){
+            alert('Please enter a word.');
+            return;
+        }
+
+        const russianList = document.getElementById("RussianList");
+        const spanishList = document.getElementById("SpanishList");
+     
+            const listItem = document.createElement('li');
+            listItem.textContent = inputText;
+            if (detectChar(inputText) === "Cyrillic"){
+                addwithHyperLink(inputText, russianList);  
+                } else {
+                addwithHyperLink(inputText, spanishList);
+            }
+            console.log(spanishList);
+            console.log(russianList);
+
+        return;
+    }
+
+    function exportToExcel(){
+        const russianList = document.getElementById("RussianList");
+        const spanishList = document.getElementById("SpanishList");
+
+        const russianWords = Array.from(russianList.querySelectorAll('a')).map(link => link.textContent); // convert node list into an array to use .map()
+        const spanishWords = Array.from(spanishList.querySelectorAll('a')).map(link => link.textContent);
+
+        const data = [["Russian List", "Spanish List"]]; // this is like a 2d array in C
+
+        const maxLength = Math.max(russianWords.length, spanishWords.length);
+   
+        for (let i = 0; i < maxLength; i++){
+            const russianWord = russianWords[i];
+            const spanishWord = spanishWords[i];
+            data.push([russianWord, spanishWord]);
+        }
+
+        const worksheet = XLSX.utils.aoa_to_sheet(data);
+        console.log("Worksheet:", worksheet);
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Lists");
+
+        XLSX.writeFile(workbook, "lists.xlsx");
+
+    }
+
+    function removeWord(){
+        const textbox = document.getElementById('textbox');
+        const inputText = textbox.value;
+
+        if (inputText.trim() == ''){
+            alert('Please enter a word.');
+            return;
+        }
+
+        const russianList = document.getElementById("RussianList");
+        const spanishList = document.getElementById("SpanishList");
+     
+            const listItem = document.createElement('li');
+            listItem.textContent = inputText;
+            if (detectChar(inputText) === "Cyrillic"){
+                //loop through the russian list and see if the word exists
+                const russianContainer = russianList.querySelectorAll('a');
+                russianContainer.forEach(anchor => {
+                    const currText = anchor.textContent.trim();
+
+                    if (currText === inputText){
+                        //remove the word from the list here
+                        anchor.remove();
+                    }
+                });
+                
+                } else {
+                //loop through the spanish list and see if the word exists
+                const spanishContainer = spanishList.querySelectorAll('a');
+                spanishContainer.forEach(anchor => {
+                    const currText = anchor.textContent.trim();
+
+                    if (currText === inputText){
+                        //remove the word from the list here
+                        anchor.remove();
+                    }
+            });
+        }
+    }
+
+    document.getElementById("Recommendation").addEventListener("click", () =>  { // function so I can pass in dynamically changing lists aka the words...
+        const spanishList = document.querySelectorAll("#SpanishList a");
+        const russianList = document.querySelectorAll("#RussianList a");
+
+        const maxLength = Math.max(russianList.length, spanishList.length);
+        let current = 0;
+  
+        while (current != maxLength){
+            let currEspWord = spanishList.item(current); 
+            let currRusWord = russianList.item(current); 
+
+            if (currEspWord != null)
+                recProto(currEspWord.textContent);
+            if (currRusWord != null)
+                recProto(currRusWord.textContent);
+            current++; // I forgot to include and I ended up breaking my quota limit T_T (fml)
+        }
+            
+        
+    })
+
+    async function recProto(word) {
+        const apiKey = "AIzaSyBDsd89Arj46TMV4aqWP25VUVVtg2psx3g";
+        const query = encodeURIComponent(word);
+        const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${query}&type=video&key=${apiKey}`;
+
+        let i = 0;
+        try {
+            let response = await fetch(url);
+            let data = await response.json();
+
+            // now we need to determine if the video is spanish or russian to include our restrictions
+            if (data.items && data.items.length > 0) {
+                while (i != 3){
+                let video = data.items[i]; 
+                let videoTitle = video.snippet.title;
+                let detectedScript = detectChar(videoTitle); // returns either latin or cyrillic
+                let videoURL = `https://www.youtube.com/watch?v=${video.id.videoId}`;
+
+                if (detectedScript === "Latin"){ // if Latin, then run another translation check
+                        let langResponse = await fetch('/translate', {
+                            method: 'POST',
+                            headers: {'Content-type':'application/json',},
+                            body: JSON.stringify({ text: videoTitle}),
+                        });
+                        
+                        if (langResponse.ok){
+                            let result = await langResponse.json();
+                            if (result.detected_language === 'es')
+                                console.log(`Recommended Video: ${videoTitle} - ${videoURL}`);
+                        } else{
+                                console.error("Error detecting language. Status:", langResponse.status);
+                        }
+                i++;
+                }
+                if (detectedScript === "Cyrillic"){ // if Latin, then run another translation check
+                        let langResponse = await fetch('/translate', {
+                            method: 'POST',
+                            headers: {'Content-type':'application/json',},
+                            body: JSON.stringify({ text: videoTitle}),
+                        });
+                        
+                        if (langResponse.ok){
+                            let result = await langResponse.json();
+                            if (result.detected_language === 'ru')
+                                console.log(`Recommended Video: ${videoTitle} - ${videoURL}`);
+                        } else{
+                                console.error("Error detecting language. Status:", langResponse.status);
+                        }
+                i++;
+                }
+            }} else {
+                console.error("No videos found for this word.");
+            }
+        } catch (error) {
+            console.error("Error fetching YouTube videos: ", error);
+        }
+        }
+    
+</script>
+    
+</html>
