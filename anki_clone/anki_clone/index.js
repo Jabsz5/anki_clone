@@ -55,6 +55,37 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+app.get('/login', (req, res) => {
+  res.sendFile(path.join(__dirname, 'templates', 'index.html'));
+});
+
+app.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Basic validation
+    if (!username || !password) {
+      return res.status(400).send('Username and password are required');
+    }
+
+    // Insert user into the database
+    // So now instead of inserting, I want to retrieve information from the database
+    const sql = `SELECT * FROM anki_clone_info`;
+    const [rows] = await pool.execute(sql);
+    console.log("Query results: ", rows);
+    res.status(201).send('Account login successful');
+  } catch (err) {
+    console.error('Error in /login:', err);
+
+    // Handle duplicate username errors
+    if (err.code === 'ER_DUP_ENTRY') {
+      return res.status(400).send('Username does not exists');
+    }
+
+    res.status(500).send('Internal server error');
+  }
+});
+
 // Start the server
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');

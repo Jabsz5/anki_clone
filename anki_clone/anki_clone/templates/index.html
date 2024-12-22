@@ -10,19 +10,56 @@
     <h2>Login Information</h2>
 
     <div class="User">Username</div>
-    <input type="text" id="userInput" placeholder="Enter username">
+    <input type="text" id="username" placeholder="Enter username">
     <div class="Password">Password</div>
-    <input type="password" id="userInput" placeholder="Enter password">
+    <input type="password" id="userPassword" placeholder="Enter password">
     
     <p></p>
 
-    <button id="Login">Login</button>
+    <button onclick="ToAnkiClonepage()" id="Login">Login</button>
     <button onclick="toCreateAccountPage()" id="Sign-up">Sign-up</button>
 </body>
 
 <script>
+    function ToAnkiClonepage(){
+        // first we need to check if the account is in the database
+        const Login = document.getElementById('Login');
+
+    Login.addEventListener('Login', async(event) => {
+        event.preventDefault();
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('userPassword').value;
+    
+
+    try {
+        const response = await fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({username, password}),
+        });
+
+        if (response.ok) {
+            const message = await response.text();
+            alert(message);
+        } else{
+            const error = await response.text();
+            alert('Error: ' + error);
+        }
+    } catch (err){
+        console.error('Error: ', err);
+        alert('Failed to connect to server');
+        }
+    
+    window.location.href = "ankiClone.html";
+    });
+    }
+
     function toCreateAccountPage(){
         window.location.href = "CreateAccount.html";
     }
+    
 </script>
 </html>
