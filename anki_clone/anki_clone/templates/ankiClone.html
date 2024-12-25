@@ -99,7 +99,7 @@
         currList.appendChild(link);
     }
 
-    function addtoList(){
+    async function addtoList(){
         const textbox = document.getElementById('textbox');
         const inputText = textbox.value;
 
@@ -121,6 +121,31 @@
             console.log(spanishList);
             console.log(russianList);
 
+        try{
+            const response = await fetch('/store-word', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    userId: 1, // insert actual ID here..?
+                    word: inputText,
+                    language: language.trim(), // match backend format
+                }),
+            });
+
+        if (response.ok){
+            alert('Word added!');
+        } else{
+            const error = await response.text();
+            alert(`Failed to add word: ${error}`);
+        }
+        } catch (err) {
+            console.error('Error adding word:', err);
+            alert('Failed to add word');
+        }
+        
+            
         return;
     }
 

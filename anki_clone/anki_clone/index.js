@@ -11,6 +11,17 @@ app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'templates')));
 
+const pool = Createmysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '14640!Manager', // Replace with your MySQL password
+  database: 'userinfo', // Replace with your actual database name
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
+
 const Createpool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
@@ -112,6 +123,55 @@ app.post('/login', express.json(), (req, res) => {
     }
   });
 });
+
+// store a list
+app.post('/store-list', async(req, res) => {
+  const {userId, words, language } = req.body;
+
+if (!userId || !words || !language){
+  return res.status(400).send('Invalid request');
+}
+
+try{
+  const values = words.map((word) => [userId, word, language]);
+  const sql = 'INSERT INTO lists (user_id, word, language) VALUES ?';
+
+  pool.query(sql, [values], (err, results) => {
+    if (err) {
+      console.error('Error storing list: ', err);
+      return res.status(500).send('Internal Server Error');
+    }
+    res.status(201).send('List stored succesfully');
+});
+} catch (err) {
+  console.error('Unexpected error: ', err);
+  res.status(500).send('Internal Server Error');
+}
+});
+
+// retrieve list
+app.get('/get-list/:userId', async (req, res) => {
+  const { userId } = req.params;
+
+  if (!userId) {
+    return res.status(400).send('Invalid request');
+  }
+
+  try {
+    const sql = 'SELECT word, language FROM lists WHERE user_id = ?';
+    pool.query(sql, [userId], (err, results) => {
+      if (err) {
+        console.error('Error retrieving list:', err);
+        return res.status(500).send('Internal Server Error');
+      }
+      res.status(200).json(results);
+    });
+  } catch (err) {
+    console.error('Unexpected error:', err);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
 
 
 // Start the server
