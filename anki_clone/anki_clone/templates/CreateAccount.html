@@ -38,7 +38,7 @@
             },
             body: JSON.stringify({username, password}),
         });
-
+        console.log("debugging");
         if (response.ok) {
             const message = await response.text();
             alert(message);
@@ -53,11 +53,6 @@
     
     window.location.href = "index.html";
     });
-
-    function createUser(){
-        window.location.href = "index.html";
-        console.log("user successfully created");
-    }
 </script>
 </body>
 </html>

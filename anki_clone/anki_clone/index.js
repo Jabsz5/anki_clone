@@ -1,20 +1,27 @@
 const express = require('express');
-const mysql = require('mysql2/promise');
+const Createmysql = require('mysql2/promise');
+const Loginmysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const path = require('path');
+const { buffer } = require('stream/consumers');
+const cors = require('cors');
 
 const app = express();
 app.use(express.json()); 
-
-
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'templates')));
 
-const pool = mysql.createPool({
+const Createpool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
   password: '14640!Manager', // Replace with your MySQL password
   database: 'userinfo', // Replace with your actual database name
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
+
+//module.exports = pool;
 
 // Route to serve the CreateAccount.html
 app.get('/signup', (req, res) => {
@@ -40,7 +47,7 @@ app.post('/signup', async (req, res) => {
       INSERT INTO anki_clone_info (username, password)
       VALUES (?, ?)
     `;
-    await pool.query(sql, [username, hashedPassword]);
+    await Createpool.query(sql, [username, hashedPassword]);
 
     res.status(201).send('Account created successfully');
   } catch (err) {
@@ -55,36 +62,57 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-app.get('/login', (req, res) => {
-  res.sendFile(path.join(__dirname, 'templates', 'index.html'));
+const Loginpool = Loginmysql.createPool({
+  host: 'localhost',
+  user: 'root',
+  password: '14640!Manager', // Replace with your MySQL password
+  database: 'userinfo', // Replace with your actual database name
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
-app.post('/login', async (req, res) => {
-  try {
-    const { username, password } = req.body;
 
-    // Basic validation
-    if (!username || !password) {
-      return res.status(400).send('Username and password are required');
-    }
+app.post('/login', express.json(), (req, res) => {
+  console.log('Login request received:', req.body);
 
-    // Insert user into the database
-    // So now instead of inserting, I want to retrieve information from the database
-    const sql = `SELECT * FROM anki_clone_info`;
-    const [rows] = await pool.execute(sql);
-    console.log("Query results: ", rows);
-    res.status(201).send('Account login successful');
-  } catch (err) {
-    console.error('Error in /login:', err);
-
-    // Handle duplicate username errors
-    if (err.code === 'ER_DUP_ENTRY') {
-      return res.status(400).send('Username does not exists');
-    }
-
-    res.status(500).send('Internal server error');
+  const { username, password } = req.body;
+  console.log('Received data:', { username, password });
+  if (!username || !password) {
+    return res.status(400).send('Username and password are required.');
   }
+
+
+  console.log('Before executing query'); // Check if we get here
+  
+  const sql = `SELECT password FROM anki_clone_info WHERE username = ?`;
+  return Loginpool.query(sql, [username, password], async (err, results) => {
+    console.log('Query executed');
+    if (err) {
+      console.error('Database error:', err);
+      return res.status(500).send('Internal Server Error');
+    }
+
+    console.log('Query executed, results:', results);
+
+    if (results.length === 0) {
+      return res.status(401).send('Invalid username or password');
+    }
+
+    const hashedPassword = results[0].password; //WE WERE NEVER MATCHING THE ENCRYPTIONS!!!!!!
+
+    const match = await bcrypt.compare(password, hashedPassword);
+
+    if (match){
+      console.log('Login successful');
+      return res.status(200).send('Login successful');
+    } else{
+      console.log('Invalid username or password');
+      return res.status(401).send('Invalid username or password');
+    }
+  });
 });
+
 
 // Start the server
 app.listen(3000, () => {

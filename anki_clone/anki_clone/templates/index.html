@@ -8,7 +8,7 @@
 <body>
     
     <h2>Login Information</h2>
-
+<form id="LoginForm">
     <div class="User">Username</div>
     <input type="text" id="username" placeholder="Enter username">
     <div class="Password">Password</div>
@@ -16,23 +16,28 @@
     
     <p></p>
 
-    <button onclick="ToAnkiClonepage()" id="Login">Login</button>
+    <button type="submit">Login</button>
+</form>
+
     <button onclick="toCreateAccountPage()" id="Sign-up">Sign-up</button>
 </body>
 
 <script>
-    function ToAnkiClonepage(){
-        // first we need to check if the account is in the database
-        const Login = document.getElementById('Login');
-
-    Login.addEventListener('Login', async(event) => {
+     
+        const Loginform = document.getElementById('LoginForm');
+        
+        Loginform.addEventListener('submit', async(event) => {
         event.preventDefault();
 
         const username = document.getElementById('username').value;
         const password = document.getElementById('userPassword').value;
-    
+        console.log(username, password);
+        if (!username || !password){
+            alert('Please enter both username and password');
+            return;
+        }
 
-    try {
+        try {
         const response = await fetch('/login', {
             method: 'POST',
             headers: {
@@ -41,22 +46,21 @@
             body: JSON.stringify({username, password}),
         });
 
+        
         if (response.ok) {
-            const message = await response.text();
-            alert(message);
+            window.location.href = "ankiClone.html";
         } else{
             const error = await response.text();
             alert('Error: ' + error);
         }
-    } catch (err){
+        } catch (err){
         console.error('Error: ', err);
         alert('Failed to connect to server');
         }
+        window.location.href = "ankiClone.html";
+        });
     
-    window.location.href = "ankiClone.html";
-    });
-    }
-
+    
     function toCreateAccountPage(){
         window.location.href = "CreateAccount.html";
     }
