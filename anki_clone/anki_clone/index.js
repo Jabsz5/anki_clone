@@ -14,25 +14,22 @@ app.use(express.static(path.join(__dirname, 'templates')));
 const pool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '14640!Manager', // Replace with your MySQL password
-  database: 'userinfo', // Replace with your actual database name
+  password: '14640!Manager', 
+  database: 'userinfo', /
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
-
 
 const Createpool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '14640!Manager', // Replace with your MySQL password
-  database: 'userinfo', // Replace with your actual database name
+  password: '14640!Manager', 
+  database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
-
-//module.exports = pool;
 
 // Route to serve the CreateAccount.html
 app.get('/signup', (req, res) => {
@@ -76,8 +73,8 @@ app.post('/signup', async (req, res) => {
 const Loginpool = Loginmysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '14640!Manager', // Replace with your MySQL password
-  database: 'userinfo', // Replace with your actual database name
+  password: '14640!Manager', 
+  database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
@@ -104,7 +101,7 @@ app.post('/login', express.json(), (req, res) => {
       return res.status(401).send('Invalid username or password');
     }
 
-    const hashedPassword = results[0].password; //WE WERE NEVER MATCHING THE ENCRYPTIONS!!!!!!
+    const hashedPassword = results[0].password; // WE WERE NEVER MATCHING THE ENCRYPTIONS!!!!!!
     const match = await bcrypt.compare(password, hashedPassword, (err, isMatch) => {
       if (err) return res.status(500).send('Server error');
       if (!isMatch) return res.status(401).send('Invalid username or password');
@@ -134,8 +131,6 @@ app.get('/get-vocabulary', (req, res) => {
       res.status(200).json(results);
   });
 });
-
-
 
 // Start the server
 app.listen(3000, () => {

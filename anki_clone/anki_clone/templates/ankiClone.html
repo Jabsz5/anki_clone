@@ -53,9 +53,7 @@
     <button id="Export to excel spreadhseet" onclick="exportToExcel()">Export</button>
     <button id="Recommendation">Recommend</button>
 
-
 </body>
-
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script>
      function detectChar(char){
@@ -84,7 +82,6 @@
         }
     });
   
-
     function addwithHyperLink(text, currList){
 
         const link = document.createElement("a");
@@ -296,7 +293,6 @@
         }
         }
 
-
     document.addEventListener('DOMContentLoaded', async () => {
     const userId = 1; // Replace with the actual user ID after login integration
 
@@ -312,6 +308,7 @@
             data.forEach(entry => {
                 if (entry.Russian) {
                     addwithHyperLink(entry.Russian, russianList);
+                    // thank you past franco... :p
                 }
                 if (entry.Spanish) {
                     addwithHyperLink(entry.Spanish, spanishList);
@@ -326,12 +323,6 @@
         console.error('Error:', err);
         alert('Failed to connect to the server');
     }
-});
-   
-        
-
-
-    
+});    
 </script>
-    
 </html>
