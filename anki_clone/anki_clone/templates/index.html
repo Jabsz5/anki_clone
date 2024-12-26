@@ -46,9 +46,11 @@
             body: JSON.stringify({username, password}),
         });
 
-        
         if (response.ok) {
-            window.location.href = "ankiClone.html";
+            const data = await response.json();
+
+            window.location.href = `ankiClone.html?username=${data.username}`;
+            localStorage.setItem('vocabulary', JSON.stringify(data.vocabulary));
         } else{
             const error = await response.text();
             alert('Error: ' + error);
@@ -57,7 +59,6 @@
         console.error('Error: ', err);
         alert('Failed to connect to server');
         }
-        window.location.href = "ankiClone.html";
         });
     
     

@@ -86,90 +86,53 @@ const Loginpool = Loginmysql.createPool({
 
 app.post('/login', express.json(), (req, res) => {
   console.log('Login request received:', req.body);
-
   const { username, password } = req.body;
-  console.log('Received data:', { username, password });
+
   if (!username || !password) {
     return res.status(400).send('Username and password are required.');
   }
 
-
-  console.log('Before executing query'); // Check if we get here
-  
   const sql = `SELECT password FROM anki_clone_info WHERE username = ?`;
   return Loginpool.query(sql, [username, password], async (err, results) => {
-    console.log('Query executed');
+  
     if (err) {
       console.error('Database error:', err);
       return res.status(500).send('Internal Server Error');
     }
-
-    console.log('Query executed, results:', results);
 
     if (results.length === 0) {
       return res.status(401).send('Invalid username or password');
     }
 
     const hashedPassword = results[0].password; //WE WERE NEVER MATCHING THE ENCRYPTIONS!!!!!!
+    const match = await bcrypt.compare(password, hashedPassword, (err, isMatch) => {
+      if (err) return res.status(500).send('Server error');
+      if (!isMatch) return res.status(401).send('Invalid username or password');
 
-    const match = await bcrypt.compare(password, hashedPassword);
+      const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE UserID = ?';
+      Loginpool.query(vocabQuery, [username.ID], (err, vocabResults) => {
+        if (err) return res.status(500).send('Server error');
 
-    if (match){
-      console.log('Login successful');
-      return res.status(200).send('Login successful');
-    } else{
-      console.log('Invalid username or password');
-      return res.status(401).send('Invalid username or password');
-    }
+        res.status(200).json({
+          username: username.username,
+          vocabulary: vocabResults,
+        });
+      });
+    });
   });
 });
 
-// store a list
-app.post('/store-list', async(req, res) => {
-  const {userId, words, language } = req.body;
+app.get('/get-vocabulary', (req, res) => {
+  const userId = req.query.userId; // Assume user ID is passed as a query parameter
 
-if (!userId || !words || !language){
-  return res.status(400).send('Invalid request');
-}
-
-try{
-  const values = words.map((word) => [userId, word, language]);
-  const sql = 'INSERT INTO lists (user_id, word, language) VALUES ?';
-
-  pool.query(sql, [values], (err, results) => {
-    if (err) {
-      console.error('Error storing list: ', err);
-      return res.status(500).send('Internal Server Error');
-    }
-    res.status(201).send('List stored succesfully');
-});
-} catch (err) {
-  console.error('Unexpected error: ', err);
-  res.status(500).send('Internal Server Error');
-}
-});
-
-// retrieve list
-app.get('/get-list/:userId', async (req, res) => {
-  const { userId } = req.params;
-
-  if (!userId) {
-    return res.status(400).send('Invalid request');
-  }
-
-  try {
-    const sql = 'SELECT word, language FROM lists WHERE user_id = ?';
-    pool.query(sql, [userId], (err, results) => {
+  const query = 'SELECT Spanish, Russian FROM vocabulary_list WHERE UserID = ?';
+  Loginpool.query(query, [userId], (err, results) => {
       if (err) {
-        console.error('Error retrieving list:', err);
-        return res.status(500).send('Internal Server Error');
+          console.error('Error fetching vocabulary:', err);
+          return res.status(500).send('Server error');
       }
       res.status(200).json(results);
-    });
-  } catch (err) {
-    console.error('Unexpected error:', err);
-    res.status(500).send('Internal Server Error');
-  }
+  });
 });
 
 

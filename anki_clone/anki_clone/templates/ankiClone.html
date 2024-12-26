@@ -31,6 +31,7 @@
 </head>
 <body>
 
+    <h1 id="Welcome"></h1>
     <h2>Anki-Clone for Spanish and Russian</h2>
     
     <input type="text" id="textbox" placeholder="Enter a word">
@@ -294,6 +295,42 @@
             console.error("Error fetching YouTube videos: ", error);
         }
         }
+
+
+    document.addEventListener('DOMContentLoaded', async () => {
+    const userId = 1; // Replace with the actual user ID after login integration
+
+    try {
+        const response = await fetch(`/get-vocabulary?userId=${userId}`);
+        if (response.ok) {
+            const data = await response.json();
+
+            const russianList = document.getElementById("RussianList");
+            const spanishList = document.getElementById("SpanishList");
+
+            // Populate the lists with existing data
+            data.forEach(entry => {
+                if (entry.Russian) {
+                    addwithHyperLink(entry.Russian, russianList);
+                }
+                if (entry.Spanish) {
+                    addwithHyperLink(entry.Spanish, spanishList);
+                }
+            });
+        } else {
+            const error = await response.text();
+            console.error('Error fetching vocabulary:', error);
+            alert('Failed to load vocabulary');
+        }
+    } catch (err) {
+        console.error('Error:', err);
+        alert('Failed to connect to the server');
+    }
+});
+   
+        
+
+
     
 </script>
     
