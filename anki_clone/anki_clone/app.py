@@ -13,7 +13,6 @@ def translate():
     if not data or 'text' not in data:
         return jsonify({"error": "Missing 'text' field in JSON"}), 400
     
-
     video_title = data['text']  
     translator = Translator()
     detection = translator.detect(video_title)  
