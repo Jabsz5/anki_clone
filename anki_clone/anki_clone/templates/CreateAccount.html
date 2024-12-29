@@ -4,22 +4,91 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+
+    <style>
+        body, h2, input, button {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+    body {
+        font-family: 'Arial', sans-serif;
+        height: 100vh;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    }
+
+    main {
+        width: 100%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    .form-container{
+        background: darkgrey;
+        padding: 10px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    label {
+        font-size: 1rem;
+        margin-bottom: 8px;
+        color: #555;
+        display: block;
+    }
+
+    input[type="text"], input[type="password"] {
+        width: 100%;
+        padding: 1px;
+        margin-bottom: 1px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus, input[type="password"]:focus {
+        border-color: #4a90e2;
+    }
+
+    button {
+        width: 100%;
+        padding: 12px;
+        background: black;
+        color: white;
+        font-size: 1rem;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+    </style>
 </head>
 <body>
-    
-    <h2>Create an account here</h2>
-
-<form id="signupForm">
-    <div class="User">Username</div>
-    <input type="text" id="username" placeholder="Enter username">
-    <div class="Password">Password</div>
-    <input type="password" id="password" placeholder="Enter password">
-
-    <p></p>
-
-    <button type="submit">Create account</button>
-</form>
-
+    <main>
+    <div class="form-container">
+        <h2>Create an account here</h2>
+        <form id="signupForm">
+            <div class="User">Username</div>
+            <input type="text" id="username" placeholder="Enter username">
+            <div class="Password">Password</div>
+            <input type="password" id="password" placeholder="Enter password">
+            <p></p>
+            <button type="submit">Create account</button>
+        </form>
+    </div>
 <script>
     const form = document.getElementById('signupForm');
 
