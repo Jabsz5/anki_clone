@@ -229,11 +229,11 @@
             alert('Word added!');
         } else{
             const error = await response.text();
-            alert(`Failed to add word: ${error}`);
+            alert(`Failed to add word to server database: ${error}`);
         }
         } catch (err) {
             console.error('Error adding word:', err);
-            alert('Failed to add word');
+            alert('Failed to add word to server database'); // change to "failed to add word to database server"
         }
         
             

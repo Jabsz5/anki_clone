@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template
 from googletrans import Translator
+from pymystem3 import Mystem
 
 app = Flask(__name__)
 
@@ -20,3 +21,13 @@ def translate():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+
+# test run of pymorphy2
+
+mystem = Mystem()
+
+text = "играет"
+
+lemmas = mystem.lemmatize(text)
+print("Lemmas:", lemmas)

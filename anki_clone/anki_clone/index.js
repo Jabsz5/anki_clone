@@ -5,8 +5,10 @@ const bcrypt = require('bcrypt');
 const path = require('path');
 const { buffer } = require('stream/consumers');
 const cors = require('cors');
+const translate = require('@vitalets/google-translate-api');
 
 const app = express();
+
 app.use(express.json()); 
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'templates')));
@@ -130,6 +132,25 @@ app.get('/get-vocabulary', (req, res) => {
       }
       res.status(200).json(results);
   });
+});
+
+app.post("/translate", async (req, res) => {
+  const data = req.body;
+  
+  if (!data || data.text){
+    return res.status(400).json({ error: "Missing 'text' field in JSON"});
+  }
+
+  const videoTitle = data.text;
+
+  try {
+    // deep-translator for lang-detection
+    const result = await translate(videoTitle, {to: "en"});
+    res.json({ detected_language: result.from.language.iso});
+  } catch (error) {
+    console.error("Translation error:", error);
+    res.status(500).json({error: "Failed to detect language" });
+  }
 });
 
 // Start the server
