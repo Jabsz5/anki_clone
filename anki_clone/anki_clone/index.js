@@ -67,7 +67,6 @@ app.post('/signup', async (req, res) => {
     if (err.code === 'ER_DUP_ENTRY') {
       return res.status(400).send('Username already exists');
     }
-
     res.status(500).send('Internal server error');
   }
 });
@@ -81,7 +80,6 @@ const Loginpool = Loginmysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
 
 app.post('/login', express.json(), (req, res) => {
   console.log('Login request received:', req.body);

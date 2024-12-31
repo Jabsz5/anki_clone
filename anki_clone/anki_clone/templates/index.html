@@ -69,7 +69,7 @@
             const data = await response.json();
 
             window.location.href = `ankiClone.html?username=${data.username}`;
-            localStorage.setItem('vocabulary', JSON.stringify(data.vocabulary));
+            localStorage.setItem('vocabulary', JSON.stringify(data.vocabulary)); // still implementing
         } else{
             const error = await response.text();
             alert('Error: ' + error);
