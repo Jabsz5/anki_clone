@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'templates')));
 const pool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '14640!Manager', 
+  password: '???', 
   database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
@@ -26,7 +26,7 @@ const pool = Createmysql.createPool({
 const Createpool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '14640!Manager', 
+  password: '???', 
   database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
