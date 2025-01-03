@@ -212,6 +212,7 @@
             console.log(spanishList);
             console.log(russianList);
 
+            console.log("fetching data...");
         try{
             const response = await fetch('/store-word', {
                 method: 'POST',
@@ -221,10 +222,9 @@
                 body: JSON.stringify({
                     userId: 1, // insert actual ID here..?
                     word: inputText,
-                    language: language.trim(), // match backend format
-                }),
+                    language: detectChar(inputText)
+                })
             });
-
         if (response.ok){
             alert('Word added!');
         } else{

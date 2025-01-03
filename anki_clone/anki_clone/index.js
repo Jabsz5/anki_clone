@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'templates')));
 const pool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '???', 
+  password: '14640!Manager', 
   database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
@@ -26,7 +26,7 @@ const pool = Createmysql.createPool({
 const Createpool = Createmysql.createPool({
   host: 'localhost',
   user: 'root',
-  password: '???', 
+  password: '14640!Manager', 
   database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
@@ -130,6 +130,39 @@ app.get('/get-vocabulary', (req, res) => {
       }
       res.status(200).json(results);
   });
+});
+
+app.post('/store-word', async (req, res) => {
+  const { userId, word, language } = req.body;
+
+  if (!userId || !word || !language) {
+      return res.status(400).json({ error: 'Missing required fields' });
+  }
+
+  try {
+
+    let column;
+
+    if (language === 'Latin'){
+      column = 'Spanish';
+    }
+    else{
+      column = 'Russian';
+    }
+
+    const connection = await Loginpool.promise();
+      // Insert the word into the database
+      const query = `
+          INSERT INTO vocabulary_list (UserID, ${column}) 
+          VALUES (?, ?)
+      `;
+      await connection.query(query, [userId, word])
+
+      res.status(200).json({ message: 'Word added successfully' });
+  } catch (error) {
+      console.error('Database error:', error);
+      res.status(500).json({ error: 'Failed to add word to the database' });
+  }
 });
 
 app.post("/translate", async (req, res) => {
