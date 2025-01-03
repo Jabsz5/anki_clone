@@ -165,6 +165,41 @@ app.post('/store-word', async (req, res) => {
   }
 });
 
+app.post("/remove-word", async (req, res) => {
+
+  const {userId, word, language} = req.body;
+
+  if (!userId || !word || !language){
+    return res.status(400).json({ error: 'Missing required fields...'});
+  }
+
+  try {
+    let column;
+
+    if (language === 'Spanish') {
+      column = 'Spanish';
+    } else if (language === 'Russian') {
+      column = 'Russian';
+    } else {
+      return res.status(400).json({ error: 'Invalid language specified' });
+    }
+
+    const connection = await Loginpool.promise();
+
+    const query = 'DELETE FROM vocabulary_list WHERE UserID = ? AND ${column} = ?';
+    const [result] = await connection.query(query, [userId, word]);
+
+    if (result.affectedRows > 0) {
+      res.status(200).json({ message: 'Word removed successfully' });
+    } else {
+      res.status(404).json({ error: 'Word not found in the database' });
+    }
+} catch (error) {
+    console.error('Database error:', error);
+    res.status(500).json({ error: 'Failed to remove word from the database' });
+  }
+});
+
 app.post("/translate", async (req, res) => {
   const data = req.body;
   

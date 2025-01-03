@@ -267,7 +267,7 @@
 
     }
 
-    function removeWord(){
+    async function removeWord(){
         const textbox = document.getElementById('textbox');
         const inputText = textbox.value;
 
@@ -291,6 +291,9 @@
                         //remove the word from the list here
                         anchor.remove();
                     }
+
+                    //remove word from database
+
                 });
                 
                 } else {
@@ -304,6 +307,23 @@
                         anchor.remove();
                     }
             });
+        }
+        try {
+            const response = await fetch('/remove-word', {
+                method: 'DELETE',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({userId, word: inputText, language: detectChar(inputText)})
+            });
+
+            if (response.ok) {
+                alert('Word removed succesfully');
+            } else{
+                const error = await response.json();
+                alert('Failed to remove word: ' + error.error);
+            }
+        } catch (err){
+            console.error('Error: ', err);
+            alert('Failed to connect to server');
         }
     }
 
