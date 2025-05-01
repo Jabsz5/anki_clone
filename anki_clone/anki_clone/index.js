@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require('express');
 const Createmysql = require('mysql2/promise');
 const Loginmysql = require('mysql2');
