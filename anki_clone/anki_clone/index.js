@@ -14,24 +14,28 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'templates')));
 
 const pool = Createmysql.createPool({
-  host: '192.168.1.200',
-  user: 'real_anki_user',
-  password: 'Manager14640!', 
-  database: 'userinfo', 
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD, 
+  database: process.env.DB_NAME, 
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
 
+module.exports = Createmysql.promise();
+
 const Createpool = Createmysql.createPool({
-  host: '192.168.1.200',
-  user: 'real_anki_user',
-  password: 'Manager14640!', 
-  database: 'userinfo', 
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD, 
+  database: process.env.DB_NAME, 
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
+
+module.exports = Createpool.promise();
 
 // Route to serve the CreateAccount.html
 app.get('/signup', (req, res) => {
@@ -72,14 +76,16 @@ app.post('/signup', async (req, res) => {
 });
 
 const Loginpool = Loginmysql.createPool({
-  host: '192.168.1.200',
-  user: 'real_anki_user',
-  password: 'Manager14640!', 
-  database: 'userinfo', 
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD, 
+  database: process.env.DB_NAME, 
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
+
+module.exports = Loginpool.promise();
 
 app.post('/login', express.json(), (req, res) => {
   console.log('Login request received:', req.body);
