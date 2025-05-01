@@ -23,7 +23,6 @@ const pool = Createmysql.createPool({
   queueLimit: 0,
 });
 
-module.exports = Createmysql.promise();
 
 const Createpool = Createmysql.createPool({
   host: process.env.DB_HOST,
@@ -34,8 +33,6 @@ const Createpool = Createmysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
 });
-
-module.exports = Createpool.promise();
 
 // Route to serve the CreateAccount.html
 app.get('/signup', (req, res) => {
@@ -85,7 +82,6 @@ const Loginpool = Loginmysql.createPool({
   queueLimit: 0,
 });
 
-module.exports = Loginpool.promise();
 
 app.post('/login', express.json(), (req, res) => {
   console.log('Login request received:', req.body);
