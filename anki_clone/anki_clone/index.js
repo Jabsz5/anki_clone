@@ -14,9 +14,9 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'templates')));
 
 const pool = Createmysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '14640!Manager', 
+  host: '192.168.1.200',
+  user: 'real_anki_user',
+  password: 'Manager14640!', 
   database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
@@ -24,9 +24,9 @@ const pool = Createmysql.createPool({
 });
 
 const Createpool = Createmysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '14640!Manager', 
+  host: '192.168.1.200',
+  user: 'real_anki_user',
+  password: 'Manager14640!', 
   database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
@@ -72,9 +72,9 @@ app.post('/signup', async (req, res) => {
 });
 
 const Loginpool = Loginmysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '14640!Manager', 
+  host: '192.168.1.200',
+  user: 'real_anki_user',
+  password: 'Manager14640!', 
   database: 'userinfo', 
   waitForConnections: true,
   connectionLimit: 10,
@@ -169,6 +169,8 @@ app.post("/remove-word", async (req, res) => {
 
   const {userId, word, language} = req.body;
 
+  console.log("Received delete request:", req.body); //DEBUGGING
+
   if (!userId || !word || !language){
     return res.status(400).json({ error: 'Missing required fields...'});
   }
@@ -176,9 +178,9 @@ app.post("/remove-word", async (req, res) => {
   try {
     let column;
 
-    if (language === 'Spanish') {
+    if (language === 'Latin') {
       column = 'Spanish';
-    } else if (language === 'Russian') {
+    } else if (language === 'Cyrillic') {
       column = 'Russian';
     } else {
       return res.status(400).json({ error: 'Invalid language specified' });
@@ -186,8 +188,12 @@ app.post("/remove-word", async (req, res) => {
 
     const connection = await Loginpool.promise();
 
-    const query = 'DELETE FROM vocabulary_list WHERE UserID = ? AND ${column} = ?';
+    const query = `DELETE FROM vocabulary_list WHERE UserID = ? AND \`${column}\` = ?`;
+    console.log("Executing query:", query, [userId, word]); // DEBUG 2
+
     const [result] = await connection.query(query, [userId, word]);
+
+    console.log("Query result:", result); // DEBUG 3
 
     if (result.affectedRows > 0) {
       res.status(200).json({ message: 'Word removed successfully' });

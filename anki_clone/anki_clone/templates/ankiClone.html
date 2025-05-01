@@ -288,7 +288,6 @@
                     const currText = anchor.textContent.trim();
 
                     if (currText === inputText){
-                        //remove the word from the list here
                         anchor.remove();
                     }
 
@@ -310,9 +309,9 @@
         }
         try {
             const response = await fetch('/remove-word', {
-                method: 'DELETE',
+                method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({userId, word: inputText, language: detectChar(inputText)})
+                body: JSON.stringify({userId: 1, word: inputText, language: detectChar(inputText)})
             });
 
             if (response.ok) {
