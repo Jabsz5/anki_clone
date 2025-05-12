@@ -57,7 +57,7 @@ app.post('/signup', async (req, res) => {
 
     // Insert user into the database
     const sql = `
-      INSERT INTO anki_clone_info (username, password)
+      INSERT INTO anki_clone_user_info (username, password)
       VALUES (?, ?)
     `;
     await Createpool.query(sql, [username, hashedPassword]);
@@ -93,7 +93,7 @@ app.post('/login', express.json(), (req, res) => {
     return res.status(400).send('Username and password are required.');
   }
 
-  const sql = `SELECT password FROM anki_clone_info WHERE username = ?`;
+  const sql = `SELECT password FROM anki_clone_user_info WHERE username = ?`;
   return Loginpool.query(sql, [username, password], async (err, results) => {
   
     if (err) {
@@ -110,7 +110,7 @@ app.post('/login', express.json(), (req, res) => {
       if (err) return res.status(500).send('Server error');
       if (!isMatch) return res.status(401).send('Invalid username or password');
 
-      const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE UserID = ?';
+      const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE user_id = ?';
       Loginpool.query(vocabQuery, [username.ID], (err, vocabResults) => {
         if (err) return res.status(500).send('Server error');
 
@@ -126,7 +126,7 @@ app.post('/login', express.json(), (req, res) => {
 app.get('/get-vocabulary', (req, res) => {
   const userId = req.query.userId; // Assume user ID is passed as a query parameter
 
-  const query = 'SELECT Spanish, Russian FROM vocabulary_list WHERE UserID = ?';
+  const query = 'SELECT Spanish, Russian FROM vocabulary_list WHERE user_id = ?';
   Loginpool.query(query, [userId], (err, results) => {
       if (err) {
           console.error('Error fetching vocabulary:', err);
@@ -157,7 +157,7 @@ app.post('/store-word', async (req, res) => {
     const connection = await Loginpool.promise();
       // Insert the word into the database
       const query = `
-          INSERT INTO vocabulary_list (UserID, ${column}) 
+          INSERT INTO vocabulary_list (user_id, ${column}) 
           VALUES (?, ?)
       `;
       await connection.query(query, [userId, word])
@@ -192,7 +192,7 @@ app.post("/remove-word", async (req, res) => {
 
     const connection = await Loginpool.promise();
 
-    const query = `DELETE FROM vocabulary_list WHERE UserID = ? AND \`${column}\` = ?`;
+    const query = `DELETE FROM vocabulary_list WHERE user_id = ? AND \`${column}\` = ?`;
     console.log("Executing query:", query, [userId, word]); // DEBUG 2
 
     const [result] = await connection.query(query, [userId, word]);
