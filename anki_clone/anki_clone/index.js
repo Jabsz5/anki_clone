@@ -60,6 +60,7 @@ app.post('/login', async (req, res) => {
     if (results.length === 0) return res.status(401).send('Invalid username or password');
 
     const user = results[0];
+    const userId = user.id;
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).send('Invalid username or password');
 
@@ -94,16 +95,16 @@ app.get('/get-vocabulary', async (req, res) => {
 
 // Store word
 app.post('/store-word', async (req, res) => {
-  const { userID, word, language } = req.body;
+  const { userId, word, language } = req.body;
 
-  console.log("adding word: ", {userID, word, language});
+  console.log("adding word: ", {userId, word, language});
 
-  if (!userID || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
+  if (!userId || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
 
   try {
     const column = language === 'Latin' ? 'Spanish' : 'Russian';
     const query = `INSERT INTO vocabulary_list (user_id, ${column}) VALUES (?, ?)`;
-    await pool.query(query, [userID, word]);
+    await pool.query(query, [userId, word]);
     res.status(200).json({ message: 'Word added successfully' });
   } catch (error) {
     console.error('Database error:', error);
