@@ -36,7 +36,7 @@ app.post('/signup', async (req, res) => {
     if (!username || !password) return res.status(400).send('Username and password are required');
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const sql = `INSERT INTO anki_clone_info (username, password) VALUES (?, ?)`;
+    const sql = `INSERT INTO anki_clone_user_info (username, password) VALUES (?, ?)`;
 
     await pool.query(sql, [username, hashedPassword]);
 
@@ -54,7 +54,7 @@ app.post('/login', async (req, res) => {
   if (!username || !password) return res.status(400).send('Username and password are required.');
 
   try {
-    const sql = `SELECT * FROM anki_clone_info WHERE username = ?`;
+    const sql = `SELECT * FROM anki_clone_user_info WHERE username = ?`;
     const [results] = await pool.query(sql, [username]);
 
     if (results.length === 0) return res.status(401).send('Invalid username or password');
