@@ -99,7 +99,7 @@ app.post('/store-word', async (req, res) => {
 
   try {
     const column = language === 'Latin' ? 'Spanish' : 'Russian';
-    const query = `INSERT INTO vocabulary_list (id, ${column}) VALUES (?, ?)`;
+    const query = `INSERT INTO vocabulary_list (user_id, ${column}) VALUES (?, ?)`;
     await pool.query(query, [id, word]);
     res.status(200).json({ message: 'Word added successfully' });
   } catch (error) {
