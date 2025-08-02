@@ -63,8 +63,8 @@ app.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).send('Invalid username or password');
 
-    const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE UserID = ?';
-    const [vocabResults] = await pool.query(vocabQuery, [user.ID]);
+    const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE id = ?';
+    const [vocabResults] = await pool.query(vocabQuery, [user.id]);
 
     res.status(200).json({
       username: user.username,
@@ -78,9 +78,9 @@ app.post('/login', async (req, res) => {
 
 // Get vocabulary
 app.get('/get-vocabulary', async (req, res) => {
-  const userId = req.query.userId;
+  const id = req.query.id;
   try {
-    const [results] = await pool.query('SELECT Spanish, Russian FROM vocabulary_list WHERE UserID = ?', [userId]);
+    const [results] = await pool.query('SELECT Spanish, Russian FROM vocabulary_list WHERE id = ?', [id]);
     res.status(200).json(results);
   } catch (err) {
     console.error('Error fetching vocabulary:', err);
@@ -90,13 +90,13 @@ app.get('/get-vocabulary', async (req, res) => {
 
 // Store word
 app.post('/store-word', async (req, res) => {
-  const { userId, word, language } = req.body;
-  if (!userId || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
+  const { id, word, language } = req.body;
+  if (!id || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
 
   try {
     const column = language === 'Latin' ? 'Spanish' : 'Russian';
-    const query = `INSERT INTO vocabulary_list (UserID, ${column}) VALUES (?, ?)`;
-    await pool.query(query, [userId, word]);
+    const query = `INSERT INTO vocabulary_list (id, ${column}) VALUES (?, ?)`;
+    await pool.query(query, [id, word]);
     res.status(200).json({ message: 'Word added successfully' });
   } catch (error) {
     console.error('Database error:', error);
@@ -106,8 +106,8 @@ app.post('/store-word', async (req, res) => {
 
 // Remove word
 app.post('/remove-word', async (req, res) => {
-  const { userId, word, language } = req.body;
-  if (!userId || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
+  const { id, word, language } = req.body;
+  if (!id || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
 
   try {
     let column;
@@ -115,8 +115,8 @@ app.post('/remove-word', async (req, res) => {
     else if (language === 'Cyrillic') column = 'Russian';
     else return res.status(400).json({ error: 'Invalid language specified' });
 
-    const query = `DELETE FROM vocabulary_list WHERE UserID = ? AND \`${column}\` = ?`;
-    const [result] = await pool.query(query, [userId, word]);
+    const query = `DELETE FROM vocabulary_list WHERE id = ? AND \`${column}\` = ?`;
+    const [result] = await pool.query(query, [id, word]);
 
     if (result.affectedRows > 0) {
       res.status(200).json({ message: 'Word removed successfully' });
