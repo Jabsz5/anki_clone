@@ -221,7 +221,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userID: parseInt(userId, 10), // insert actual ID here..?
+                    userId: parseInt(userId, 10), // insert actual ID here..?
                     word: inputText,
                     language: detectChar(inputText)
                 })
@@ -407,7 +407,7 @@
         }
 
     document.addEventListener('DOMContentLoaded', async () => {
-    const userId = 1; // Replace with the actual user ID after login integration
+    const userId = localStorage.getItem('userId'); // Replace with the actual user ID after login integration
 
     try {
         const response = await fetch(`/get-vocabulary?userId=${userId}`);

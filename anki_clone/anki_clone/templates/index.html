@@ -70,7 +70,7 @@
             console.log("Data received after successful login attempt: " + data);
             window.location.href = `ankiClone.html?username=${data.username}`;
             localStorage.setItem('vocabulary', JSON.stringify(data.vocabulary)); // still implementing
-            localStorage.setItem('userI', data.userId);
+            localStorage.setItem('userId', data.userId);
         } else{
             const error = await response.text();
             alert('Error: ' + error);
