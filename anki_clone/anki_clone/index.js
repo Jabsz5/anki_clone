@@ -95,9 +95,11 @@ app.get('/get-vocabulary', async (req, res) => {
 // Store word
 app.post('/store-word', async (req, res) => {
   const { userID, word, language } = req.body;
-  if (!userID || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
 
   console.log("adding word: ", {userID, word, language});
+  
+  if (!userID || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
+
   try {
     const column = language === 'Latin' ? 'Spanish' : 'Russian';
     const query = `INSERT INTO vocabulary_list (user_id, ${column}) VALUES (?, ?)`;
