@@ -69,6 +69,7 @@ app.post('/login', async (req, res) => {
     res.status(200).json({
       username: user.username,
       vocabulary: vocabResults,
+      userId: user.id,
     });
   } catch (err) {
     console.error('Login error:', err);

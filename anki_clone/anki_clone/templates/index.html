@@ -70,6 +70,7 @@
 
             window.location.href = `ankiClone.html?username=${data.username}`;
             localStorage.setItem('vocabulary', JSON.stringify(data.vocabulary)); // still implementing
+            localStorage.setItem('ID', data.id);
         } else{
             const error = await response.text();
             alert('Error: ' + error);
