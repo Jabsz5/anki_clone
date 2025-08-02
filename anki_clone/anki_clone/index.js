@@ -66,6 +66,7 @@ app.post('/login', async (req, res) => {
     const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE id = ?';
     const [vocabResults] = await pool.query(vocabQuery, [user.id]);
 
+    console.log("user info: " + user);
     res.status(200).json({
       username: user.username,
       vocabulary: vocabResults,
