@@ -83,9 +83,10 @@ app.post('/login', async (req, res) => {
 
 // Get vocabulary
 app.get('/get-vocabulary', async (req, res) => {
-  const id = req.query.id;
+  const userId = req.query.id;
+  
   try {
-    const [results] = await pool.query('SELECT Spanish, Russian FROM vocabulary_list WHERE id = ?', [id]);
+    const [results] = await pool.query('SELECT Spanish, Russian FROM vocabulary_list WHERE user_id = ?', [userId]);
     res.status(200).json(results);
   } catch (err) {
     console.error('Error fetching vocabulary:', err);
