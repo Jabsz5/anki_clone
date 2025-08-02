@@ -63,10 +63,12 @@ app.post('/login', async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(401).send('Invalid username or password');
 
+    // if we get to this part, then username and password has been validated
+    
     const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE id = ?';
     const [vocabResults] = await pool.query(vocabQuery, [user.id]);
 
-    console.log("user info: " + user);
+    console.log("user ID: " + user.id);
     res.status(200).json({
       username: user.username,
       vocabulary: vocabResults,
