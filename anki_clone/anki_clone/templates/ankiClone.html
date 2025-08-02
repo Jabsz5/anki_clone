@@ -408,7 +408,10 @@
 
     document.addEventListener('DOMContentLoaded', async () => {
     const userId = localStorage.getItem('userId'); // Replace with the actual user ID after login integration
-
+    if (!userId) {
+        alert("No user ID found. Please log in again.");
+        window.location.href = "index.html";
+    }
     try {
         const response = await fetch(`/get-vocabulary?userId=${userId}`);
         if (response.ok) {
@@ -417,11 +420,9 @@
             const russianList = document.getElementById("RussianList");
             const spanishList = document.getElementById("SpanishList");
 
-            // Populate the lists with existing data
             data.forEach(entry => {
                 if (entry.Russian) {
                     addwithHyperLink(entry.Russian, russianList);
-                    // thank you past franco... :p
                 }
                 if (entry.Spanish) {
                     addwithHyperLink(entry.Spanish, spanishList);
