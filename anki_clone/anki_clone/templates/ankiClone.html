@@ -193,7 +193,7 @@
     async function addtoList(){
         const textbox = document.getElementById('textbox');
         const inputText = textbox.value;
-        const ID = localStorage.getItem('userID');
+        const userId = localStorage.getItem('userId');
 
         if (inputText.trim() == ''){
             alert('Please enter a word.');
@@ -221,7 +221,7 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    userID: ID, // insert actual ID here..?
+                    userID: parseInt(userId, 10), // insert actual ID here..?
                     word: inputText,
                     language: detectChar(inputText)
                 })

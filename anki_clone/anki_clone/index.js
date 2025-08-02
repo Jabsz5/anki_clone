@@ -72,7 +72,7 @@ app.post('/login', async (req, res) => {
     res.status(200).json({
       username: user.username,
       vocabulary: vocabResults,
-      userID: user.id,
+      userId: user.id,
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -97,13 +97,13 @@ app.post('/store-word', async (req, res) => {
   const { userID, word, language } = req.body;
 
   console.log("adding word: ", {userID, word, language});
-  
+
   if (!userID || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
 
   try {
     const column = language === 'Latin' ? 'Spanish' : 'Russian';
     const query = `INSERT INTO vocabulary_list (user_id, ${column}) VALUES (?, ?)`;
-    await pool.query(query, [id, word]);
+    await pool.query(query, [userID, word]);
     res.status(200).json({ message: 'Word added successfully' });
   } catch (error) {
     console.error('Database error:', error);
