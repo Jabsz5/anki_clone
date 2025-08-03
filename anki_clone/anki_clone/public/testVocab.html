@@ -146,26 +146,10 @@
     });
 
     const vocabListEl = document.getElementById("vocabList");
-    let vocabulary = [];
 
-    async function fetchVocbulary(){
-        const userId = localStorage.getItem("userId");
-        if(!userId){
-            alert("User not logged in...");
-            return;
-        }
+    let vocabulary = JSON.parse(localStorage.getItem("vocabulary"));
 
-        try{
-            const response = await fetch(`/get-vocabulary?userId=${userId}`);
-            const data = await response.json();
-            vocabulary = data;
-            showLanguage("Spanish");
-        } catch(err){
-            console.log("Failed to fetch vocablary", err);
-        }
-    }
-
-    function showLanguage(language, vocabulary) {
+    function showLanguage(language) {
         vocabListEl.innerHTML = "";
         const words = vocabulary[language];
 
