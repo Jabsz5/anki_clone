@@ -151,6 +151,9 @@
 
       // grab the story 
       console.log(story);
+      loopThroughText();
+      // loop thru string and find the words that are highlighted 
+
 
     });
 
@@ -228,6 +231,15 @@
 
         showLanguage("Spanish"); // or "Russian" if you want
     });
+
+    function loopThroughText(){
+        const text = document.getElementById("storyInput").value.trim();
+
+        const words = text.split(/\s+/); // Split by whitespace
+        for (let word of words) {
+            console.log("Word:", word);
+        }
+    }
   </script>
 
 </body>
