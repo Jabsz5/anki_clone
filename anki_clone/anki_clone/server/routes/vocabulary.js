@@ -4,7 +4,7 @@ const pool = require('../db/connection');
 const router = express.Router();
 
 // Store word
-app.post('/store-word', async (req, res) => {
+router.post('/store-word', async (req, res) => {
   const { userId, word, language } = req.body;
 
   console.log("adding word: ", {userId, word, language});
@@ -23,7 +23,7 @@ app.post('/store-word', async (req, res) => {
 });
 
 // Remove word
-app.post('/remove-word', async (req, res) => {
+router.post('/remove-word', async (req, res) => {
   const { userId, word, language } = req.body;
   if (!userId || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
 
@@ -48,7 +48,7 @@ app.post('/remove-word', async (req, res) => {
 });
 
 // Get vocabulary
-app.get('/get-vocabulary', async (req, res) => {
+router.get('/get-vocabulary', async (req, res) => {
   const userId = req.query.userId;
   console.log('GET /get-vocabulary hit with userId: ', userId);
 
