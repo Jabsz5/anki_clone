@@ -150,14 +150,30 @@
     let vocabulary = JSON.parse(localStorage.getItem("vocabulary"));
 
     function showLanguage(language) {
+        const spanishWords = vocabulary.spanish;
+        const russianWords = vocabulary.russian;
+
         vocabListEl.innerHTML = "";
         console.log('local storage for vocabulary contains: ', vocabulary);
-        if (!vocabulary || !vocabulary[language]) {
+        if (!vocabulary) {
             vocabListEl.innerHTML = `<li>No words available in ${language}</li>`;
             return;
         }
 
-        vocabulary[language].forEach(word => {
+        spanishWords.forEach(word => {
+        const li = document.createElement("li");
+        li.textContent = word;
+        li.classList.add("vocab-word");
+
+        // Click to toggle selection
+        li.addEventListener("click", () => {
+        li.classList.toggle("selected");
+        });
+
+        vocabListEl.appendChild(li);
+    });
+
+       russianWords.forEach(word => {
         const li = document.createElement("li");
         li.textContent = word;
         li.classList.add("vocab-word");
