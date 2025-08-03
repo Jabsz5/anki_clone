@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 
     // if we get to this part, then username and password has been validated
     
-    const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE id = ?';
+    const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE user_id = ?';
     const [vocabResults] = await pool.query(vocabQuery, [user.id]);
 
     // Separate Spanish and Russian words
