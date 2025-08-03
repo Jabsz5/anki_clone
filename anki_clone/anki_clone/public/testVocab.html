@@ -138,7 +138,7 @@
     }
 
     document.getElementById("submitStory").addEventListener("click", () => {
-      const story = document.getElementById("storyInput").value.trim();
+      const story = document.getElementById("storyInput").value.trim().toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/);
       if (!story) {
         alert("Please write something before submitting!");
         return;
@@ -146,14 +146,21 @@
 
       alert("Story submitted! (logic not implemented yet)");
       // compare current selected words with how are in the story.
-      console.log("Selected Words Count:", selectedWords.size);
-      console.log("Selected Words:", Array.from(selectedWords));
 
-      // grab the story 
-      console.log(story);
-      loopThroughText();
-      // loop thru string and find the words that are highlighted 
+      const selected = Array.from(selectedWords);
+      let matchCount = 0;
 
+      selected.forEach(word => {
+        if (story.includes(word.toLowerCase())) {
+            matchCount++;
+        }
+      })
+
+      if (matchCount === selected.length){
+        alert("All selected vocab words!");
+      } else{
+        alert(`You used ${matchCount} out of ${selected.length} selected words. Try again!`);
+      }
 
     });
 
@@ -232,7 +239,7 @@
         showLanguage("Spanish"); // or "Russian" if you want
     });
 
-    function loopThroughText(){
+    function parseStory(){
         const text = document.getElementById("storyInput").value.trim();
 
         // split text into array
@@ -240,6 +247,8 @@
         const wordsArray = sanitizeText.split(/\s+/);
 
         console.log("Cleaned words: ", wordsArray);
+
+        return wordsArray;
     }
   </script>
 
