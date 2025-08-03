@@ -151,7 +151,7 @@
 
     function showLanguage(language) {
         vocabListEl.innerHTML = "";
-        
+        console.log('local storage for vocabulary contains: ', vocabulary);
         if (!vocabulary || !vocabulary[language]) {
             vocabListEl.innerHTML = `<li>No words available in ${language}</li>`;
             return;
