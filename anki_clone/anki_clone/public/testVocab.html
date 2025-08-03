@@ -160,31 +160,35 @@
             return;
         }
 
-        spanishWords.forEach(word => {
-        const li = document.createElement("li");
-        li.textContent = word;
-        li.classList.add("vocab-word");
+        if (language === 'Spanish'){
+            spanishWords.forEach(word => {
+            const li = document.createElement("li");
+            li.textContent = word;
+            li.classList.add("vocab-word");
 
-        // Click to toggle selection
-        li.addEventListener("click", () => {
-        li.classList.toggle("selected");
-        });
+            // Click to toggle selection
+            li.addEventListener("click", () => {
+            li.classList.toggle("selected");
+            });
+            
+            vocabListEl.appendChild(li);
+            });
+        }
 
-        vocabListEl.appendChild(li);
-    });
+        if (language === 'Russian'){
+            russianWords.forEach(word => {
+            const li = document.createElement("li");
+            li.textContent = word;
+            li.classList.add("vocab-word");
 
-       russianWords.forEach(word => {
-        const li = document.createElement("li");
-        li.textContent = word;
-        li.classList.add("vocab-word");
+            // Click to toggle selection
+            li.addEventListener("click", () => {
+            li.classList.toggle("selected");
+            });
 
-        // Click to toggle selection
-        li.addEventListener("click", () => {
-        li.classList.toggle("selected");
-        });
-
-        vocabListEl.appendChild(li);
-    });
+            vocabListEl.appendChild(li);
+            });
+        }
 }
 
     document.addEventListener("DOMContentLoaded", fetchVocbulary);
