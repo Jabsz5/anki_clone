@@ -180,6 +180,8 @@
                 } else{
                     selectedWords.delete(word);
                 }
+                console.log("Selected Words Count:", selectedWords.size);
+                console.log("Selected Words:", Array.from(selectedWords));
             });
             
             vocabListEl.appendChild(li);
@@ -201,16 +203,24 @@
                 } else{
                     selectedWords.delete(word);
                 }
+                console.log("Selected Words Count:", selectedWords.size);
+                console.log("Selected Words:", Array.from(selectedWords));
             });
 
-            console.log("Selected Words Count:", selectedWords.size);
-            console.log("Selected Words:", Array.from(selectedWords));
             vocabListEl.appendChild(li);
             });
         }
 }
 
-    document.addEventListener("DOMContentLoaded", fetchVocbulary);
+    document.addEventListener("DOMContentLoaded", () => {
+        const vocabulary = JSON.parse(localStorage.getItem("vocabulary"));
+        if (!vocabulary) {
+            console.error("No vocabulary found in localStorage.");
+            return;
+            }
+
+        showLanguage("Spanish"); // or "Russian" if you want
+    });
   </script>
 
 </body>
