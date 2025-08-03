@@ -235,10 +235,10 @@
     function loopThroughText(){
         const text = document.getElementById("storyInput").value.trim();
 
-        const words = text.split(/\s+/); // Split by whitespace
-        for (let word of words) {
-            console.log("Word:", word);
-        }
+        // split text into array
+        const wordsArray = text.split(/\s+/);
+
+        console.log("Words in array:", wordsArray);
     }
   </script>
 
