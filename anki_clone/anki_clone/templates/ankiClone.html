@@ -271,6 +271,7 @@
     async function removeWord(){
         const textbox = document.getElementById('textbox');
         const inputText = textbox.value;
+        const userId = localStorage.getItem('userId');
 
         if (inputText.trim() == ''){
             alert('Please enter a word.');
@@ -312,7 +313,7 @@
             const response = await fetch('/remove-word', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({userId: 1, word: inputText, language: detectChar(inputText)})
+                body: JSON.stringify({userId: userId, word: inputText, language: detectChar(inputText)})
             });
 
             if (response.ok) {
