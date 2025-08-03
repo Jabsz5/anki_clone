@@ -160,14 +160,15 @@
 
         const result = await response.json();
         console.log("NLP results:", result);
-        console.log("\nNLP results of first index", result[0]);
-
 
       const selected = Array.from(selectedWords);
       let matchCount = 0;
 
-      selected.forEach(word => {
-        if (story.includes(word.toLowerCase())) {
+      selected.forEach(currWord => {
+        if (story.includes(currWord.toLowerCase())) {
+            // then check if the word is just a different variation of the word
+            let match = results.find(entry => entry.word === currWord)
+            console.log(match);
             matchCount++;
         }
       })
