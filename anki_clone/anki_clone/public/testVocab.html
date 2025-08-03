@@ -236,9 +236,10 @@
         const text = document.getElementById("storyInput").value.trim();
 
         // split text into array
-        const wordsArray = text.split(/\s+/);
+        const sanitizeText = text.replace(/[.,!?;:()"'-]/g, "");
+        const wordsArray = sanitizeText.split(/\s+/);
 
-        console.log("Words in array:", wordsArray);
+        console.log("Cleaned words: ", wordsArray);
     }
   </script>
 
