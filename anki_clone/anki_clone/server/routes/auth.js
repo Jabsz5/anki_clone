@@ -50,11 +50,25 @@ router.post('/login', async (req, res) => {
     const vocabQuery = 'SELECT Spanish, Russian FROM vocabulary_list WHERE id = ?';
     const [vocabResults] = await pool.query(vocabQuery, [user.id]);
 
+    // Separate Spanish and Russian words
+    const spanishWords = vocabResults
+        .filter(entry => entry.Spanish)
+        .map(entry => entry.Spanish);
+
+    const russianWords = vocabResults
+        .filter(entry => entry.Russian)
+        .map(entry => entry.Russian);
+
     console.log("user ID: " + user.id);
+
+
     res.status(200).json({
       username: user.username,
-      vocabulary: vocabResults,
       userId: user.id,
+      vocabulary: {
+        spanish: spanishWords,
+        russian: russianWords,
+      },
     });
   } catch (err) {
     console.error('Login error:', err);

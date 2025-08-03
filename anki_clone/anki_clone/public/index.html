@@ -68,8 +68,9 @@
         if (response.ok) {
             const data = await response.json();
             console.log("Data received after successful login attempt: ", data);
-            console.log("Vocabulary list: ", data.vocabulary);
             localStorage.setItem('vocabulary', JSON.stringify(data.vocabulary)); // still implementing
+            console.log("Vocabulary list: ", data.vocabulary);
+            
             localStorage.setItem('userId', data.userId);
             window.location.href = `ankiClone.html?username=${data.username}`;
         } else{
