@@ -9,9 +9,9 @@ const cors = require('cors');
 const app = express();
 
 // load route modules
-const authRoutes = require('./routes/auth');
-const vocabRoutes = require('./routes/vocabulary');
-const translateRoutes = require('./routes/translate');
+const authRoutes = require('./server/routes/auth');
+const vocabRoutes = require('./server/routes/vocabulary');
+const translateRoutes = require('./server/routes/translate');
 
 app.use(express.json()); 
 app.use(cors());
