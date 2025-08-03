@@ -131,6 +131,8 @@
   </div>
 
   <script>
+    let selectedWords = new Set();
+
     function goBack() {
       window.location.href = 'ankiClone.html';
     }
@@ -153,7 +155,10 @@
         const spanishWords = vocabulary.spanish;
         const russianWords = vocabulary.russian;
 
+        const vocabListEl = document.getElementById("vocabList");
         vocabListEl.innerHTML = "";
+        selectedWords.clear();
+
         console.log('local storage for vocabulary contains: ', vocabulary);
         if (!vocabulary) {
             vocabListEl.innerHTML = `<li>No words available in ${language}</li>`;
@@ -168,7 +173,13 @@
 
             // Click to toggle selection
             li.addEventListener("click", () => {
-            li.classList.toggle("selected");
+                li.classList.toggle("selected");
+                
+                if (li.classList.contains("selected")){
+                    selectedWords.add(word);
+                } else{
+                    selectedWords.delete(word);
+                }
             });
             
             vocabListEl.appendChild(li);
@@ -183,9 +194,17 @@
 
             // Click to toggle selection
             li.addEventListener("click", () => {
-            li.classList.toggle("selected");
+                li.classList.toggle("selected");
+                
+                if (li.classList.contains("selected")){
+                    selectedWords.add(word);
+                } else{
+                    selectedWords.delete(word);
+                }
             });
 
+            console.log("Selected Words Count:", selectedWords.size);
+            console.log("Selected Words:", Array.from(selectedWords));
             vocabListEl.appendChild(li);
             });
         }
