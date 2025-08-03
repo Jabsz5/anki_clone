@@ -126,7 +126,7 @@ app.post('/remove-word', async (req, res) => {
     else return res.status(400).json({ error: 'Invalid language specified' });
 
     const query = `DELETE FROM vocabulary_list WHERE user_id = ? AND \`${column}\` = ?`;
-    const [result] = await pool.query(query, [id, word]);
+    const [result] = await pool.query(query, [userId, word]);
 
     if (result.affectedRows > 0) {
       res.status(200).json({ message: 'Word removed successfully' });
