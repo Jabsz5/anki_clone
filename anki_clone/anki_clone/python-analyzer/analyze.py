@@ -6,7 +6,7 @@ app = Flask(__name__)
 CORS(app)
 nlp = spacy.load("es_core_news_md")
 
-@app.route('.analyze', methods=['POST'])
+@app.route('/analyze', methods=['POST'])
 def analyze_text():
     data = request.get_json()
     text = data.get("text", "")
