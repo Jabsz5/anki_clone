@@ -151,14 +151,13 @@
 
     function showLanguage(language) {
         vocabListEl.innerHTML = "";
-        const words = vocabulary[language];
-
-        if (!words || words.length === 0) {
+        
+        if (!vocabulary || !vocabulary[language]) {
             vocabListEl.innerHTML = `<li>No words available in ${language}</li>`;
             return;
         }
 
-        words.forEach(word => {
+        vocabulary[language].forEach(word => {
         const li = document.createElement("li");
         li.textContent = word;
         li.classList.add("vocab-word");
