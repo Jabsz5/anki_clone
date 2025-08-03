@@ -116,8 +116,8 @@ app.post('/store-word', async (req, res) => {
 
 // Remove word
 app.post('/remove-word', async (req, res) => {
-  const { id, word, language } = req.body;
-  if (!id || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
+  const { userId, word, language } = req.body;
+  if (!userId || !word || !language) return res.status(400).json({ error: 'Missing required fields' });
 
   try {
     let column;
