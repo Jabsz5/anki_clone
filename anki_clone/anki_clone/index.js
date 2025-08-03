@@ -83,7 +83,7 @@ app.post('/login', async (req, res) => {
 
 // Get vocabulary
 app.get('/get-vocabulary', async (req, res) => {
-  const userId = req.query.id;
+  const userId = req.query.userId;
   console.log('GET /get-vocabulary hit with userId: ', userId);
 
   try {
