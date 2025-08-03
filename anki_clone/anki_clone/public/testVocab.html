@@ -137,15 +137,30 @@
       window.location.href = 'ankiClone.html';
     }
 
-    document.getElementById("submitStory").addEventListener("click", () => {
+    document.getElementById("submitStory").addEventListener("click", async () => {
       const story = document.getElementById("storyInput").value.trim().toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/);
       if (!story) {
         alert("Please write something before submitting!");
         return;
       }
 
-      alert("Story submitted! (logic not implemented yet)");
-      // compare current selected words with how are in the story.
+      // compare current selected words with how many are in the story.
+      try{
+        const response = await fetch("http://192.168.1.200:5000/analyze", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({text: story})
+        });
+
+        if (!response.ok){
+            throw new Error("Failed to get analysis from NLP server");
+        }
+
+        const result = await response.json();
+        console.log("NLP results:", result);
+
 
       const selected = Array.from(selectedWords);
       let matchCount = 0;
@@ -161,7 +176,11 @@
       } else{
         alert(`You used ${matchCount} out of ${selected.length} selected words. Try again!`);
       }
-
+    
+    } catch (err) {
+        console.log("NLP request failed:", err);
+        alert("There was an error analyzing your story.");
+        }
     });
 
     const vocabListEl = document.getElementById("vocabList");
