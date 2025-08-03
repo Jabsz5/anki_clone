@@ -10,7 +10,7 @@ nlp = spacy.load("es_core_news_md")
 def analyze_text():
     data = request.get_json()
     text = data.get("text", "")
-    doc = npl(text)
+    doc = nlp(text)
 
     result = []
     for token in doc:
