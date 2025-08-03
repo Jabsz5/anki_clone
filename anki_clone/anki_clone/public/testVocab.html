@@ -87,6 +87,22 @@
       display: flex;
       gap: 10px;
     }
+
+    .vocab-word {
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 5px;
+        transition: background 0.2s;
+    }
+
+    .vocab-word:hover {
+        background-color: #e0e0e0;
+    }
+
+    .vocab-word.selected {
+        background-color: #4a90e2;
+        color: white;
+    }
   </style>
 </head>
 <body>
@@ -132,36 +148,47 @@
     const vocabListEl = document.getElementById("vocabList");
     let vocabulary = [];
 
-    async function fetchVocabulary() {
-      const userId = localStorage.getItem("userId");
-      if (!userId) {
-        alert("User not logged in.");
-        return;
-      }
-
-      try {
-        const response = await fetch(`/get-vocabulary?userId=${userId}`);
-        const data = await response.json();
-        vocabulary = data; // Store globally
-        showLanguage("Spanish"); // Default view
-      } catch (err) {
-        console.error("Failed to fetch vocabulary:", err);
-      }
-    }
-
-    function showLanguage(language) {
-      vocabListEl.innerHTML = "";
-      vocabulary.forEach(entry => {
-        const word = entry[language];
-        if (word) {
-          const li = document.createElement("li");
-          li.textContent = word;
-          vocabListEl.appendChild(li);
+    async function fetchVocbulary(){
+        const userId = localStorage.getItem("userId");
+        if(!userId){
+            alert("User not logged in...");
+            return;
         }
-      });
+
+        try{
+            const response = await fetch(`/get-vocabulary?userId=${userId}`);
+            const data = await response.json();
+            vocabulary = data;
+            showLanguage("Spanish");
+        } catch(err){
+            console.log("Failed to fetch vocablary", err);
+        }
     }
 
-    document.addEventListener("DOMContentLoaded", fetchVocabulary);
+    function showLanguage(language, vocabulary) {
+        vocabListEl.innerHTML = "";
+        const words = vocabulary[language];
+
+        if (!words || words.length === 0) {
+            vocabListEl.innerHTML = `<li>No words available in ${language}</li>`;
+            return;
+        }
+
+        words.forEach(word => {
+        const li = document.createElement("li");
+        li.textContent = word;
+        li.classList.add("vocab-word");
+
+        // Click to toggle selection
+        li.addEventListener("click", () => {
+        li.classList.toggle("selected");
+        });
+
+        vocabListEl.appendChild(li);
+    });
+}
+
+    document.addEventListener("DOMContentLoaded", fetchVocbulary);
   </script>
 
 </body>
