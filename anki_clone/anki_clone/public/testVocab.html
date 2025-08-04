@@ -165,13 +165,19 @@
       let matchCount = 0;
 
       selected.forEach(currWord => {
-        let match = result.find(entry => entry.word === currWord)
-        
+        let match = result.find(entry => entry.word === currWord);
+        console.log("Current word JSON: ", match);
+    
         // first we need to check if its a verb or adjective
         if (match.POS === 'ADJ'){
             //we can ignore the last two letters if plural..
             console.log("we found an adjective!", match);
         }
+
+        if (match.POS === 'VERB' || 'AUX'){
+            console.log("Found a verb!", match);
+        }
+        
 
         if (story.includes(currWord.toLowerCase())) {
             // then check if the word is just a different variation of the word
