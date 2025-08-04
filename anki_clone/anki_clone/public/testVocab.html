@@ -162,12 +162,20 @@
         console.log("NLP results:", result);
         console.log("Type:", typeof result);
         console.log("Is array?", Array.isArray(result));
-      const selected = Array.from(selectedWords);
-      let matchCount = 0;
+        const selected = Array.from(selectedWords);
+        let matchCount = 0;
 
       // debugging
       for (let i = 0; i < result.length; i++){
-        console.log(`Entry ${i} POS:`, result[i]["POS:"]);
+        if (result[i]["POS:"] === 'ADJ'){
+            console.log("Adjective found!" + result[i]["POS:"]);
+        }
+        if (result[i]["POS:"] === 'VERB'){
+            console.log("Verb found!" + result[i]["POS:"]);
+        }
+        if (result[i]["POS:"] === 'AUX'){
+            console.log("Auxiliary verb found!" + result[i]["POS:"]);
+        }
       }
 
       selected.forEach(currWord => {
