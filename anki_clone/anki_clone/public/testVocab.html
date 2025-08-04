@@ -167,15 +167,21 @@
 
       // debugging
       for (let i = 0; i < result.length; i++){
-        if (result[i]["POS:"] === 'ADJ'){
-            console.log("Adjective found!" + result[i]["POS:"]);
+        let POS = result[i]["POS:"];
+        let word = result[i].word;
+
+        if (POS === 'ADJ' && typeof word === 'string'){
+            const lower = word.toLowerCase();
+
+            if (lower.endsWith('os') || lower.endsWith('as') || lower.endsWith('es')){
+                result[i].word = word.slice(0,-2);
+                console.log(`Trimmed plural adjective: "${word}" -> "${result[i].word}"`);
+            } else{
+                result[i].word = word.slice(0,-1);
+                console.log(`Trimmed singular adjective: "${word}" → "${result[i].word}"`);
+            }
         }
-        if (result[i]["POS:"] === 'VERB'){
-            console.log("Verb found!" + result[i]["POS:"]);
-        }
-        if (result[i]["POS:"] === 'AUX'){
-            console.log("Auxiliary verb found!" + result[i]["POS:"]);
-        }
+        
       }
 
       selected.forEach(currWord => {
