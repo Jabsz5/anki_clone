@@ -160,7 +160,8 @@
 
         const result = await response.json();
         console.log("NLP results:", result);
-
+        console.log("Type:", typeof result);
+        console.log("Is array?", Array.isArray(result));
       const selected = Array.from(selectedWords);
       let matchCount = 0;
 
