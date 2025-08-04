@@ -167,15 +167,7 @@
 
       // debugging
       for (let i = 0; i < result.length; i++){
-        if (result[i].POS === 'ADJ'){
-            console.log("Adjective found! It's ", result[i]);
-        }
-        if (result[i].POS === 'VERB'){
-            console.log("Verb found! It's ", result[i]);
-        }
-        if (result[i].POS === 'AUX'){
-            console.log("Auxiliary verb found! It's ", result[i]);
-        }
+        console.log(`Entry ${i} POS:`, result[i].POS);
       }
 
       selected.forEach(currWord => {
