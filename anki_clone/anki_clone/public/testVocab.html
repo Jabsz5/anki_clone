@@ -162,7 +162,7 @@
         console.log("NLP results:", result);
         console.log("Type:", typeof result);
         console.log("Is array?", Array.isArray(result));
-        const selected = Array.from(selectedWords);
+        const selected = Array.from(selectedWords).map(el => el.textContent.toLowerCase());
         let matchCount = 0;
 
       // debugging
@@ -193,27 +193,14 @@
       // now lets check the new response array...
       console.log("\n new response array: ", result);
 
-      selected.forEach(currWord => {
-        // we just need to find the highlighted words and see if they are 'ADJ' 'VERB' or 'AUX';
-        let match = result.filter(entry => entry.POS === 'ADJ' || 'VERB' || 'AUX');
-        console.log("Current word JSON: ", match);
-        
-        // first we need to check if its a verb or adjective
-        if (match && match.POS === 'ADJ'){
-            //we can ignore the last two letters if plural..
-            console.log("we found an adjective!", match);
-        }
+      // now we can check the whole story with our updated JSON array
+      for (let i = 0; i < result.length; i++){
+        const wordInResponse = result[i].word?.toLowerCase();
 
-        if (match && (match.POS === 'VERB' || 'AUX')){
-            console.log("Found a verb!", match);
-        }
-        
-
-        if (story.includes(currWord.toLowerCase())) {
-            // then check if the word is just a different variation of the word
+        if (selected.includes(wordInResponse)){
             matchCount++;
         }
-      })
+      }
 
       if (matchCount === selected.length){
         alert("All selected vocab words!");
