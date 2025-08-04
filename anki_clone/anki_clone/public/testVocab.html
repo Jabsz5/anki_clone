@@ -164,6 +164,10 @@
       const selected = Array.from(selectedWords);
       let matchCount = 0;
 
+      // debugging
+      let match = result.filter(entry => entry.POS === 'ADJ' || 'VERB' || 'AUX');
+      console.log("Current word JSON: ", match);
+
       selected.forEach(currWord => {
         // we just need to find the highlighted words and see if they are 'ADJ' 'VERB' or 'AUX';
         let match = result.filter(entry => entry.POS === 'ADJ' || 'VERB' || 'AUX');
