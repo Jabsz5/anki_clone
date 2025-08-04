@@ -169,16 +169,14 @@
       for (let i = 0; i < result.length; i++){
         let POS = result[i]["POS:"];
         let word = result[i].word;
+        let lemma = result[i].lemma;
 
         if (POS === 'ADJ' && typeof word === 'string'){
             const lower = word.toLowerCase();
 
-            if (lower.endsWith('os') || lower.endsWith('as') || lower.endsWith('es')){
-                result[i].word = word.slice(0,-2);
-                console.log(`Trimmed plural adjective: "${word}" -> "${result[i].word}"`);
-            } else{
-                result[i].word = word.slice(0,-1);
-                console.log(`Trimmed singular adjective: "${word}" → "${result[i].word}"`);
+            if (lower.endsWith('os') || lower.endsWith('as') || lower.endsWith('es') || lower.endsWith('a')){
+                result[i].word = lemme;
+                console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
             }
         }
         
