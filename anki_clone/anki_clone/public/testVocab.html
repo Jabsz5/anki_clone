@@ -165,7 +165,8 @@
       let matchCount = 0;
 
       selected.forEach(currWord => {
-        let match = result.find(entry => entry.word === currWord);
+        // we just need to find the highlighted words and see if they are 'ADJ' 'VERB' or 'AUX';
+        let match = result.find(entry => entry.word === 'ADJ' || 'VERB' || 'AUX');
         console.log("Current word JSON: ", match);
         
         // first we need to check if its a verb or adjective
@@ -174,7 +175,7 @@
             console.log("we found an adjective!", match);
         }
 
-        if (match && match.POS === 'VERB' || 'AUX'){
+        if (match && (match.POS === 'VERB' || 'AUX')){
             console.log("Found a verb!", match);
         }
         
