@@ -181,8 +181,12 @@
         }
         if ((POS === 'VERB' || POS === 'AUX') && typeof word === 'string'){
             const lower = word.toLowerCase();
+
+            if (lower != lemma){ // no need to perform operation if verb is already in lemma form.
             result[i].word = lemma;
             console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
+            }
+            
         } 
       }
 
