@@ -162,7 +162,8 @@
         console.log("NLP results:", result);
         console.log("Type:", typeof result);
         console.log("Is array?", Array.isArray(result));
-        const selected = Array.from(selectedWords).map(el => el.textContent.toLowerCase());
+        const selected = Array.from(selectedWords).map(el => el?.textContent?.toLowerCase()).filter(Boolean);
+        console.log("Selected is the following DS: ", selected);
         let matchCount = 0;
 
       // debugging
