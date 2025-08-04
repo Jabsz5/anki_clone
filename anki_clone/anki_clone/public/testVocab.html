@@ -165,8 +165,17 @@
       let matchCount = 0;
 
       // debugging
-      let match = result.filter(entry => entry.POS === 'ADJ' || entry.POS === 'VERB' || entry.POS === 'AUX');
-      console.log("Current word JSON with right filtering... :p : ", match);
+      for (let i = 0; i < result.length; i++){
+        if (result[i].POS === 'ADJ'){
+            console.log("Adjective found! It's ", result[i]);
+        }
+        if (result[i].POS === 'VERB'){
+            console.log("Verb found! It's ", result[i]);
+        }
+        if (result[i].POS === 'AUX'){
+            console.log("Auxiliary verb found! It's ", result[i]);
+        }
+      }
 
       selected.forEach(currWord => {
         // we just need to find the highlighted words and see if they are 'ADJ' 'VERB' or 'AUX';
