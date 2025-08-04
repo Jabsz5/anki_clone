@@ -175,12 +175,19 @@
             const lower = word.toLowerCase();
 
             if (lower.endsWith('os') || lower.endsWith('as') || lower.endsWith('es') || lower.endsWith('a')){
-                result[i].word = lemme;
+                result[i].word = lemma;
                 console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
             }
         }
-        
+        if ((POS === 'VERB' || POS === 'AUX') && typeof word === 'string'){
+            const lower = word.toLowerCase();
+            result[i].word = lemma;
+            console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
+        } 
       }
+
+      // now lets check the new response array...
+      console.log("\n new response array: ", result);
 
       selected.forEach(currWord => {
         // we just need to find the highlighted words and see if they are 'ADJ' 'VERB' or 'AUX';
