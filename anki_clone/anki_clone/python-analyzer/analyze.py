@@ -1,15 +1,43 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import spacy
+import re
 
 app = Flask(__name__)
 CORS(app)
-nlp = spacy.load("es_core_news_md")
+
+# Load both models at once
+nlp_es = spacy.load("es_core_news_md")
+nlp_ru = spacy.load("ru_core_news_md")
+
+MODELS = {
+    "es": nlp_es,
+    "ru": nlp_ru,
+}
+
+CYRILLIC_RE = re.compile(r"[\u0400-\u04FF]")
+
+def pick_lang(text: str, forced_lang: str | None) -> str:
+    if forced_lang in MODELS:
+        return forced_lang
+
+    if CYRILLIC_RE.search(text or ""):
+        return "ru"
+
+    return "es"
 
 @app.route('/analyze', methods=['POST'])
 def analyze_text():
     data = request.get_json()
     text = data.get("text", "")
+    forced_lang = (data.get("lang") or "").lower()
+
+    if not text.strip():
+        return jsonify({"error": "No text provided."}), 400
+
+    lang = pick_lang(text, forced_lang)
+    nlp = MODELS[lang]
+
     doc = nlp(text)
 
     result = []
@@ -17,7 +45,7 @@ def analyze_text():
         result.append({
             "word": token.text,
             "lemma": token.lemma_,
-            "POS:": token.pos_
+            "POS": token.pos_
         })
 
     return jsonify(result)
