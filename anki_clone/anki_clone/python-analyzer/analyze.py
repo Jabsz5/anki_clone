@@ -36,6 +36,7 @@ def analyze_text():
         return jsonify({"error": "No text provided."}), 400
 
     lang = pick_lang(text, forced_lang)
+    print("language detected: " lang)
     nlp = MODELS[lang]
 
     doc = nlp(text)
