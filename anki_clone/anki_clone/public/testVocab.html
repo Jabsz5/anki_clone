@@ -163,7 +163,7 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({text: story.join(" "), language: detectChar(text)})
+            body: JSON.stringify({text: story.join(" "), language: detectChar(story)})
         });
 
         if (!response.ok){
