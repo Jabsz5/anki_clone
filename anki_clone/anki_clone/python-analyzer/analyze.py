@@ -15,21 +15,11 @@ MODELS = {
     "ru": nlp_ru,
 }
 
-def pick_lang(text: str) -> str:
-    code = text[0]
-
-    print("The character in the string is", code)
-
-    if 0x0400 <= ord(code) <= 0x04FF:
-        return "ru"
-
-    return "es"
-
 @app.route('/analyze', methods=['POST'])
 def analyze_text():
     data = request.get_json()
     text = data.get("text", "")
-    language = (data.get("language"))
+    language = data.get("language")
 
     if not text.strip():
         return jsonify({"error": "No text provided."}), 400
