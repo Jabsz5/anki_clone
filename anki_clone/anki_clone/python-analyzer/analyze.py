@@ -19,7 +19,7 @@ def pick_lang(text: str) -> str:
     code = text[0]
     print("Currently debugging...")
 
-    if 0x0400 <= ord(code) <= 0x04FF:
+    if 0x0400 <= hex(ord(code)) <= 0x04FF:
         return "ru"
 
     return "es"
