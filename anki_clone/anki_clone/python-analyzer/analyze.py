@@ -15,13 +15,10 @@ MODELS = {
     "ru": nlp_ru,
 }
 
-CYRILLIC_RE = re.compile(r"[\u0400-\u04FF]")
+def pick_lang(text: str) -> str:
+    code = text[0]
 
-def pick_lang(text: str, forced_lang: str | None) -> str:
-    if forced_lang in MODELS:
-        return forced_lang
-
-    if CYRILLIC_RE.search(text or ""):
+    if 0x0400 <= ord(ch) <= 0x04FF:
         return "ru"
 
     return "es"
@@ -35,7 +32,7 @@ def analyze_text():
     if not text.strip():
         return jsonify({"error": "No text provided."}), 400
 
-    lang = pick_lang(text, forced_lang)
+    lang = pick_lang(text)
     print("language detected: ", lang)
     nlp = MODELS[lang]
 
