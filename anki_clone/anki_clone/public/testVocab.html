@@ -139,7 +139,7 @@
 
     document.getElementById("submitStory").addEventListener("click", async () => {
       const story = document.getElementById("storyInput").value.trim().toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/);
-      
+
       if (!story) {
         alert("Please write something before submitting!");
         return;
@@ -162,10 +162,10 @@
         }
 
         const result = await response.json();
-        console.log("NLP results:", result);
+        console.log("NLP results (this is returning the story the user wrote):", result);
       
         const selected = Array.from(selectedWords).map(el => el?.textContent?.toLowerCase()).filter(Boolean);
-        console.log("Selected is the following DS: ", selected);
+        console.log("Selected words: " + selected);
         let matchCount = 0;
 
       // debugging
@@ -250,8 +250,6 @@
                 } else{
                     selectedWords.delete(word);
                 }
-                console.log("Selected Words Count:", selectedWords.size);
-                console.log("Selected Words:", Array.from(selectedWords));
             });
             
             vocabListEl.appendChild(li);
@@ -273,8 +271,6 @@
                 } else{
                     selectedWords.delete(word);
                 }
-                console.log("Selected Words Count:", selectedWords.size);
-                console.log("Selected Words:", Array.from(selectedWords));
             });
 
             vocabListEl.appendChild(li);
