@@ -137,15 +137,24 @@
       window.location.href = 'ankiClone.html';
     }
 
+    function detectChar(char){
+        const code = char.charCodeAt(0);
+
+        if (code >= 0x0041 && code <= 0x007A){
+            return "Latin";
+        } else if (code >= 0x0400 && code <= 0x04FF){
+            return "Cyrillic";
+        } else{
+            return "Unknown lol";
+        }
+    }
+
     document.getElementById("submitStory").addEventListener("click", async () => {
       const story = document.getElementById("storyInput").value.trim().toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/);
-
       if (!story) {
         alert("Please write something before submitting!");
         return;
       }
-
-  
 
       // compare current selected words with how many are in the story.
       try{
@@ -154,7 +163,7 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({text: story.join(" ") })
+            body: JSON.stringify({text: story.join(" "), language: detectChar(text)})
         });
 
         if (!response.ok){
@@ -162,14 +171,13 @@
         }
 
         const result = await response.json();
-        console.log("NLP results (this is returning the story the user wrote):", result);
-      
-        const selected = Array.from(selectedWords).map(w => w?.toLowerCase()).filter(Boolean);
-        console.log("selectedWords set contains: ", selectedWords);
-        console.log("\nSelected words: ", selected);
+        console.log("NLP results:", result);
+        console.log("Type:", typeof result);
+        console.log("Is array?", Array.isArray(result));
+        const selected = Array.from(selectedWords).map(el => el?.textContent?.toLowerCase()).filter(Boolean);
+        console.log("Selected is the following DS: ", selected);
         let matchCount = 0;
 
-      // debugging
       for (let i = 0; i < result.length; i++){
         let POS = result[i]["POS:"];
         let word = result[i].word;
@@ -193,9 +201,6 @@
             
         } 
       }
-
-      // now lets check the new response array...
-      console.log("\n new response array: ", result);
 
       // now we can check the whole story with our updated JSON array
       for (let i = 0; i < result.length; i++){
@@ -251,6 +256,8 @@
                 } else{
                     selectedWords.delete(word);
                 }
+                console.log("Selected Words Count:", selectedWords.size);
+                console.log("Selected Words:", Array.from(selectedWords));
             });
             
             vocabListEl.appendChild(li);
@@ -272,6 +279,8 @@
                 } else{
                     selectedWords.delete(word);
                 }
+                console.log("Selected Words Count:", selectedWords.size);
+                console.log("Selected Words:", Array.from(selectedWords));
             });
 
             vocabListEl.appendChild(li);
