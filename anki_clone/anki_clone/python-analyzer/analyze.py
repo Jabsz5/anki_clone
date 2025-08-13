@@ -34,14 +34,14 @@ def analyze_text():
     if not text.strip():
         return jsonify({"error": "No text provided."}), 400
 
-    print("language detected: ", lang)
+    print("language detected: ", language)
 
-    if (lang == 'Latin'):
-        lang == 'es'
-    if (lang == 'Cyrillic'):
-        lang == 'ru'
+    if (language == 'Latin'):
+        language == 'es'
+    if (language == 'Cyrillic'):
+        language == 'ru'
 
-    nlp = MODELS[lang]
+    nlp = MODELS[language]
 
     doc = nlp(text)
 
