@@ -29,7 +29,7 @@ def pick_lang(text: str) -> str:
 def analyze_text():
     data = request.get_json()
     text = data.get("text", "")
-    language = (data.get("lang"))
+    language = (data.get("language"))
 
     if not text.strip():
         return jsonify({"error": "No text provided."}), 400
