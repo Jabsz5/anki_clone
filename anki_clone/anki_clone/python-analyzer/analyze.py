@@ -37,9 +37,9 @@ def analyze_text():
     print("language detected: ", language)
 
     if (language == 'Latin'):
-        language == 'es'
+        language = 'es'
     if (language == 'Cyrillic'):
-        language == 'ru'
+        language = 'ru'
 
     nlp = MODELS[language]
 
