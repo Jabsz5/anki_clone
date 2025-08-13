@@ -157,9 +157,8 @@
       }
 
 
-      // more debugging time
+      // there may be a better way to do this.. but right now fuck it :p
       const firstWord = String(story?.[0] ?? "");
-      console.log("First word inside of story is treated as...", typeof firstWord);
 
       // compare current selected words with how many are in the story.
       try{
@@ -168,7 +167,7 @@
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({text: story.join(" "), language: detectChar(story.stringify())})
+            body: JSON.stringify({text: story.join(" "), language: detectChar(firstWord)})
         });
 
         if (!response.ok){
