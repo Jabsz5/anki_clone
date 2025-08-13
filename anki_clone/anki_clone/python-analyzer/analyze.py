@@ -29,13 +29,18 @@ def pick_lang(text: str) -> str:
 def analyze_text():
     data = request.get_json()
     text = data.get("text", "")
-    forced_lang = (data.get("lang") or "").lower()
+    language = (data.get("lang"))
 
     if not text.strip():
         return jsonify({"error": "No text provided."}), 400
 
-    lang = pick_lang(text)
     print("language detected: ", lang)
+    
+    if (lang == 'Latin')
+        lang == 'es'
+    if (lang == 'Cyrillic')
+        lang == 'ru'
+
     nlp = MODELS[lang]
 
     doc = nlp(text)
