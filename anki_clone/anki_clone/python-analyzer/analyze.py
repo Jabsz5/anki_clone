@@ -17,9 +17,10 @@ MODELS = {
 
 def pick_lang(text: str) -> str:
     code = text[0]
-    print("Currently debugging...")
 
-    if 0x0400 <= hex(ord(code)) <= 0x04FF:
+    print("The character in the string is", code)
+
+    if 0x0400 <= ord(code) <= 0x04FF:
         return "ru"
 
     return "es"
