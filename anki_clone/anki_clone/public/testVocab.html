@@ -138,12 +138,13 @@
     }
 
     document.getElementById("submitStory").addEventListener("click", async () => {
+      const story = document.getElementById("storyInput").value.trim().toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/);
+      
       if (!story) {
         alert("Please write something before submitting!");
         return;
       }
 
-      const story = document.getElementById("storyInput").value.trim().toLowerCase().replace(/[^\w\s]/g, "").split(/\s+/);
   
 
       // compare current selected words with how many are in the story.
