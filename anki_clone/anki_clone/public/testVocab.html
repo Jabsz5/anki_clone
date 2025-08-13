@@ -183,29 +183,35 @@
         
         let matchCount = 0;
 
-      for (let i = 0; i < result.length; i++){
-        let POS = result[i]["POS:"];
-        let word = result[i].word;
-        let lemma = result[i].lemma;
+      if (language == 'Latin'){
+        for (let i = 0; i < result.length; i++){
+          let POS = result[i]["POS:"];
+          let word = result[i].word;
+          let lemma = result[i].lemma;
+          console.log("Current word is", word);
+          console.log("This word belongs to the part of speech:", POS);
+          console.log("It's default dictionary version is:", lemma);
 
-        if (POS === 'ADJ' && typeof word === 'string'){
-            const lower = word.toLowerCase();
+          if (POS === 'ADJ' && typeof word === 'string'){
+              const lower = word.toLowerCase();
 
-            if (lower.endsWith('os') || lower.endsWith('as') || lower.endsWith('es') || lower.endsWith('a')){
-                result[i].word = lemma;
-                console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
-            }
-        }
-        if ((POS === 'VERB' || POS === 'AUX') && typeof word === 'string'){
-            const lower = word.toLowerCase();
+              if (lower.endsWith('os') || lower.endsWith('as') || lower.endsWith('es') || lower.endsWith('a')){
+                  result[i].word = lemma;
+                  console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
+              }
+          }
+          if ((POS === 'VERB' || POS === 'AUX') && typeof word === 'string'){
+              const lower = word.toLowerCase();
 
-            if (lower != lemma){ // no need to perform operation if verb is already in lemma form.
-            result[i].word = lemma;
-            console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
-            }
+              if (lower != lemma){ // no need to perform operation if verb is already in lemma form.
+              result[i].word = lemma;
+              console.log(`Replaced with lemma : "${word}" → "${result[i].word}"`);
+              }
             
-        } 
+          } 
+        }
       }
+      
 
       // now we can check the whole story with our updated JSON array
       for (let i = 0; i < result.length; i++){
