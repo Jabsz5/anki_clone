@@ -35,10 +35,10 @@ def analyze_text():
         return jsonify({"error": "No text provided."}), 400
 
     print("language detected: ", lang)
-    
-    if (lang == 'Latin')
+
+    if (lang == 'Latin'):
         lang == 'es'
-    if (lang == 'Cyrillic')
+    if (lang == 'Cyrillic'):
         lang == 'ru'
 
     nlp = MODELS[lang]
