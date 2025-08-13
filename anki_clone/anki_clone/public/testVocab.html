@@ -156,6 +156,9 @@
         return;
       }
 
+
+      // more debugging time
+      console.log(story, typeof story);
       // compare current selected words with how many are in the story.
       try{
         const response = await fetch("http://192.168.1.200:5000/analyze", {
