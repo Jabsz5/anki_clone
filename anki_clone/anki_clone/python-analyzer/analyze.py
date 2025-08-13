@@ -18,7 +18,7 @@ MODELS = {
 def pick_lang(text: str) -> str:
     code = text[0]
 
-    if 0x0400 <= ord(ch) <= 0x04FF:
+    if 0x0400 <= ord(code) <= 0x04FF:
         return "ru"
 
     return "es"
