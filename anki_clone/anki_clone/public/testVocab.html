@@ -164,7 +164,7 @@
         const result = await response.json();
         console.log("NLP results (this is returning the story the user wrote):", result);
       
-        const selected = Array.from(selectedWords).map(el => el?.textContent?.toLowerCase()).filter(Boolean);
+        const selected = Array.from(selectedWords).map(w => w?.toLowerCase()).filter(Boolean);
         console.log("selectedWords set contains: ", selectedWords);
         console.log("\nSelected words: ", selected);
         let matchCount = 0;
