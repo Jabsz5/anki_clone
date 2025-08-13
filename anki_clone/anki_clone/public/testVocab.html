@@ -175,11 +175,10 @@
         }
 
         const result = await response.json();
-        console.log("NLP results:", result);
-        console.log("Type:", typeof result);
-        console.log("Is array?", Array.isArray(result));
-        const selected = Array.from(selectedWords).map(el => el?.textContent?.toLowerCase()).filter(Boolean);
-        console.log("Selected is the following DS: ", selected);
+        
+
+        const selected = Array.from(selectedWords).map(w => w?.toLowerCase()).filter(Boolean);
+        
         let matchCount = 0;
 
       for (let i = 0; i < result.length; i++){
